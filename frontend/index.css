@@ -1,0 +1,201 @@
+        /* Importing Google Fonts *
+
+        /* Reset some default styles */
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Header styling */
+        .header {
+            background-color: #ff80ab;
+            /* Light pink color */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+        }
+
+        .header h1 {
+            color: #ffffff;
+            /* White text */
+            font-size: 30px;
+            margin: 0;
+            font-family: 'Dancing Script', cursive;
+            /* Elegant cursive font */
+        }
+
+        .auth-buttons {
+            position: relative;
+            right: -350px;
+        }
+
+        /* Buttons styling */
+        .auth-buttons a {
+            text-decoration: none;
+            color: #ffffff;
+            background-color: #ff4081;
+            /* Darker pink color */
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-left: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .auth-buttons a:hover {
+            background-color: #f50057;
+            /* Slightly darker pink color */
+        }
+
+        /* Hamburger menu styling */
+        .hamburger {
+            font-family: 'Dancing Script', cursive;
+            display: block;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+        }
+
+        .hamburger div {
+            width: 100%;
+            height: 3px;
+
+            font-family: 'Dancing Script', cursive;
+            background-color: white;
+            margin: 5px 0;
+        }
+
+        /* Slide-down menu */
+        .menu {
+            display: none;
+            position: absolute;
+            top: 80px;
+            right: 10px;
+            background-color: #ff80ab;
+            /* Light pink color */
+            width: 200px;
+            padding: 10px;
+            text-align: right;
+            border-radius: 5px;
+        }
+
+        /* Menu link styles */
+        .menu a {
+            color: #ffffff;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+        }
+
+        .menu a:hover {
+            background-color: #f50057;
+            /* Slightly darker pink color */
+            border-radius: 5px;
+        }
+
+        .options-section {
+            display: flex;
+            justify-content: center;
+            padding: 40px;
+            background-color: #F4F1EB;
+            /* White background */
+            border-bottom: 1px solid #ff80ab;
+            /* Light pink border */
+        }
+
+        .option-button {
+            text-decoration: none;
+            color: #ffffff;
+            background-color: #ff4081;
+            /* Darker pink color */
+            padding: 15px 30px;
+            border-radius: 10px;
+            margin: 0 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .option-button:hover {
+            background-color: #f50057;
+            /* Slightly darker pink color */
+        }
+
+        /* Output sections */
+        .output-section {
+            display: none;
+            padding: 20px;
+            color: #2a2a2a;
+            margin: 20px;
+            font-family: 'Dancing Script', cursive;
+            background-color: #f8bbd0;
+            text-align: center;
+            border-radius: 10px;
+        }
+
+        .renting-form {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            /* Space between input fields */
+            margin-top: 20px;
+        }
+
+        .input-wrapper {
+            display: flex;
+            padding-left: 20px;
+            padding-right: 20px;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .input-select,
+        .input-date {
+            padding-top: 12px;
+            padding-bottom: 10px;
+            padding-left: 25px;
+            padding-right: 20px;
+            margin-top: 10px;
+            background-color:#f096b7 ;
+            border-radius: 15px;
+            border: none;
+            /* Light pink border */
+            outline: none;
+            width: 100%;
+            text-align: center;
+            /* Center-align text */
+        }
+        
+        /* Icon styling */
+        .input-icon {
+            position: absolute;
+            right: 35px;
+            top: 72%;
+            transform: translateY(-50%);
+            font-size: 16px;
+            color: #ff4081;
+            /* Darker pink color */
+        }
+
+        /* Submit button styling */
+        .submit-button {
+            background-color: #ff4081;
+            color: white;
+            position: relative;
+            top:18px;
+            left: 20px;
+            padding: 10px 30px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-align: center;
+            /* Center-align text in button */
+        }
+
+        .submit-button:hover {
+            background-color: #f50057;
+            /* Slightly darker pink color */
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&display=swap');
