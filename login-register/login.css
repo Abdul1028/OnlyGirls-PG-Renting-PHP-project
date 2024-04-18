@@ -1,0 +1,96 @@
+/* Styling for authentication forms */
+body{
+    background-color: whitesmoke;
+}
+.auth-section {
+    position: relative;
+    /* top:100px; */
+    max-width: 500px;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #F8BBD0;
+    border: 1px solid #ff80ab; /* Light pink border */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+.pos{
+    position: relative;
+    top: 100px;
+}.pos1{
+    position: relative;
+    top: 50px;
+}
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-group {
+    position: relative;
+}
+label{
+    margin: 10px;
+}
+.form-input {
+    padding: 12px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    background-color:#f096b7 ;
+    border-radius: 15px;
+    border: none;
+    width: 95%;
+    transition: background-color 0.3s ease;
+    text-align: center;
+}
+.form-input:hover{
+    background-color:#e7729d ;
+}
+.submit-button {
+    background-color: #ff4081;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: none;
+    margin-top: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-align: center;
+}
+
+.submit-button:hover {
+    background-color: #f50057; /* Slightly darker pink color */
+}
+
+/* Link styling */
+.auth-link {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.auth-link a {
+    color: #ff4081;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.auth-link a:hover {
+    color: #f50057; /* Slightly darker pink color */
+}
+
+.form-select{
+    padding-top: 12px;
+    padding-bottom: 10px;
+    padding-left: 25px;
+    padding-right: 20px;
+    margin-top: 10px;
+    background-color:#f096b7 ;
+    border-radius: 15px;
+    border: none;
+    /* Light pink border */
+    outline: none;
+    width: 100%;
+    text-align: center;
+    /* Center-align text */
+}

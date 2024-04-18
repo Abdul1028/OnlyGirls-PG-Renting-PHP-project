@@ -1,3 +1,8 @@
+<!-- <?php
+        // session_start();
+        // $_POST['login'] = False;
+        ?> -->
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -15,10 +20,26 @@
 <body>
     <header class="header">
         <h1>She Shares Vacation Rentals</h1>
-        <div class="auth-buttons">
-            <a href="#">Login</a>
-            <a href="#">Register</a>
-        </div>
+        <?php
+        session_start();
+
+        // Check if the user is logged in
+        if (!isset($_SESSION['user_logged_in']) || $_SESSION['user_logged_in'] !== true) {
+            // The user is not logged in, display login and register buttons
+            echo "<div class='auth-buttons'>";
+            echo "<a href='/login-register/login.php'>Login</a>";
+            echo "<a href='/login-register/registration.php'>Register</a>";
+            echo "</div>";
+        } else {
+            // The user is logged in, do not display the buttons
+            // You may also want to display a logout button or user profile link instead
+            echo "<div class='auth-buttons'>";
+            echo "<a href='/profile.php'>Profile</a>"; // Replace with your profile page link
+            echo "<a href='\\login-register\\logout.php'>Logout</a>"; // Replace with your logout page link
+            echo "</div>";
+        }
+        ?>
+
         <!-- Hamburger menu -->
         <div class="hamburger" id="hamburger" onclick="toggleMenu()">
             <div></div>
@@ -35,8 +56,21 @@
         <a href="#">Adventure</a>
         <a href="#">Community</a>
     </div>
+    <section class="option-section">
+        <?php
 
+        if (!isset($_SESSION['user_logged_in']) || $_SESSION['user_logged_in'] !== true) {
+            // The user is not logged in, display login and register buttons
+
+        } else {
+            $usernaem = $_SESSION['username'];
+            echo "<h2>Welcome $usernaem</h2>";
+        }
+        ?>
+    </section>
     <section class="options-section">
+
+
         <a href="#" class="option-button" onclick="showSection('sharing')">Sharing Your Room</a>
         <a href="#" class="option-button" onclick="showSection('renting')">Renting a Room</a>
     </section>
@@ -44,8 +78,60 @@
     <!-- Output sections -->
     <section class="output-section" id="sharing-output">
         <h2>Sharing Your Room</h2>
-        <p>This is the content for sharing your room. Provide details about how to share your room, how it works, and
-            any other relevant information.</p>
+        <!-- Form for listing rooms -->
+        <form class="listing-form" action="#" id="listing-form">
+            <!-- Input for room title -->
+            <div class="form-group">
+                <label for="room-title">Room Title</label>
+                <input type="text" id="room-title" name="room-title" required class="form-input">
+            </div>
+
+            <!-- Input for room description -->
+            <div class="form-group">
+                <label for="room-description">Room Description</label>
+                <textarea id="room-description" name="room-description" required class="form-input"></textarea>
+            </div>
+
+            <!-- Dropdown for room location -->
+            <div class="form-group">
+                <label for="room-location">Location</label>
+                <select id="room-location" name="room-location" required class="form-select">
+                    <option value="">Select location</option>
+                    <option value="New York">New York</option>
+                    <option value="Los Angeles">Los Angeles</option>
+                    <option value="Chicago">Chicago</option>
+                    <option value="Miami">Miami</option>
+                    <!-- Add more locations as needed -->
+                </select>
+                <span class="input-icon">📍</span>
+            </div>
+
+            <!-- Input for room price -->
+            <div class="form-group">
+                <label for="room-price">Price (per night)</label>
+                <input type="number" id="room-price" name="room-price" required class="form-input">
+            </div>
+
+            <!-- Input for available dates -->
+            <div class="form-group">
+                <label for="available-dates">Available Dates</label>
+                <input type="text" id="available-dates" name="available-dates" required class="form-input" placeholder="e.g., April 1 - 7">
+            </div>
+
+            <!-- Input for room image -->
+            <div class="form-group">
+                <label for="room-image">Room Image</label>
+                <input type="file" id="room-image" name="room-image" accept="image/*" required class="form-input">
+            </div>
+
+            <!-- Submit button -->
+            <button type="submit" class="submit-button">List Room</button>
+        </form>
+
+        <!-- Container for listed rooms -->
+        <div id="listed-rooms" style="margin-top: 20px;">
+            <!-- Listed rooms will be displayed here -->
+        </div>
     </section>
 
     <section class="output-section" id="renting-output">
@@ -56,10 +142,10 @@
                 <label for="location">Location</label>
                 <select id="location" name="location" class="input-select">
                     <option value="">Select location</option>
-                    <option value="New York">New York</option>
-                    <option value="Los Angeles">Los Angeles</option>
-                    <option value="Chicago">Chicago</option>
-                    <option value="Miami">Miami</option>
+                    <option value="New York">Mumbai</option>
+                    <option value="Los Angeles">Delhi</option>
+                    <option value="Chicago">Kolkata</option>
+                    <option value="Miami">Pune</option>
                     <!-- Add more locations as needed -->
                 </select>
                 <!-- Icon for location dropdown -->
@@ -115,6 +201,7 @@
 
         // Hide the menu by default
         document.getElementById('menu').style.display = 'none';
+
         function showSection(sectionId) {
             // Hide all output sections
             document.getElementById('sharing-output').style.display = 'none';
@@ -125,7 +212,7 @@
         }
 
         // Automatically show the "Sharing Your Room" content by default
-        window.onload = function () {
+        window.onload = function() {
             showSection('renting');
         };
 
@@ -172,7 +259,6 @@
 
         // Attach the form submission event listener
         document.getElementById('renting-form').addEventListener('submit', handleFormSubmit);
-
     </script>
 </body>
 
