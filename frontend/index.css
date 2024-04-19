@@ -98,7 +98,7 @@
         .options-section {
             display: flex;
             position: relative;
-            top:-50px;
+            top: -50px;
             justify-content: center;
             padding: 40px;
             background-color: #FCE7EA;
@@ -128,13 +128,17 @@
             display: none;
             padding: 30px;
             color: #2a2a2a;
-            margin: 30px;
+            margin-left: 50px;
+            margin-right: 50px;
+            margin-top: 10px;
+
             font-family: 'Dancing Script', cursive;
             background-color: #f8bbd0;
             text-align: center;
             border-radius: 10px;
         }
-        .option-section{
+
+        .option-section {
             padding: 30px;
             color: #2a2a2a;
             margin: 10px;
@@ -143,6 +147,7 @@
             text-align: center;
             border-radius: 10px;
         }
+
         .renting-form {
             display: flex;
             align-items: center;
@@ -152,13 +157,50 @@
             margin-top: 20px;
         }
 
+        .form-input {
+            border-radius: 10px;
+            border: none;
+            margin: 15px;
+            align-items: center;
+            background-color: #f096b7;
+            text-align: center;
+            padding: 8px;
+        }
+
+        .form-group {
+
+            display: flex;
+            padding-left: 20px;
+            padding-right: 20px;
+            align-items: center;
+            text-align: center;
+            padding-left: 15px;
+            position: relative;
+            left: 610px;
+        }
+
         .input-wrapper {
+
             display: flex;
             padding-left: 20px;
             padding-right: 20px;
             flex-direction: column;
             align-items: center;
             position: relative;
+
+        }
+
+        .form-select {
+            background-color: #f096b7;
+            text-align: center;
+            border-radius: 10px;
+            border: none;
+            padding-top: 12px;
+            padding-bottom: 10px;
+            padding-left: 25px;
+            padding-right: 20px;
+            position: relative;
+            margin-left: 20px;
         }
 
         .input-select,
@@ -168,7 +210,7 @@
             padding-left: 25px;
             padding-right: 20px;
             margin-top: 10px;
-            background-color:#f096b7 ;
+            background-color: #f096b7;
             border-radius: 15px;
             border: none;
             /* Light pink border */
@@ -177,7 +219,7 @@
             text-align: center;
             /* Center-align text */
         }
-        
+
         /* Icon styling */
         .input-icon {
             position: absolute;
@@ -194,7 +236,7 @@
             background-color: #ff4081;
             color: white;
             position: relative;
-            top:18px;
+            top: 18px;
             left: 20px;
             padding: 10px 30px;
             border-radius: 10px;
@@ -208,6 +250,56 @@
         .submit-button:hover {
             background-color: #f50057;
             /* Slightly darker pink color */
+        }
+
+        .profile {
+            text-align: center;
+            font-family: 'Dancing Script', cursive;
+            background-color: #f8bbd0;
+            border-radius: 10px;
+            color: #2a2a2a;
+            margin-left: 50px;
+            margin-right: 50px;
+            margin-top: 35px;
+            padding: 30px;
+
+        }
+
+        .h {
+            font-size: 30px;
+        }
+        #renting-output {
+            display: none; /* Make sure this is not interfering */
+        }
+        
+        .first {
+            position: relative;
+            top: 50px;
+            right: 200px;
+        }
+
+        .second {
+            position: relative;
+            top: -150px;
+            right: -100px;
+
+        }
+
+        .listing {
+            text-align: center;
+            font-family: 'Dancing Script', cursive;
+            background-color: #f8bbd0;
+            border-radius: 10px;
+            color: #2a2a2a;
+            margin-left: 450px;
+            width: 40%;
+            margin-right: 50px;
+            margin-top: 25px;
+            padding: 30px;
+        }
+
+        .room-listings-section {
+            text-align: center;
         }
 
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&display=swap');

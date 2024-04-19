@@ -1,8 +1,3 @@
-<!-- <?php
-        // session_start();
-        // $_POST['login'] = False;
-        ?> -->
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -34,7 +29,7 @@
             // The user is logged in, do not display the buttons
             // You may also want to display a logout button or user profile link instead
             echo "<div class='auth-buttons'>";
-            echo "<a href='/profile.php'>Profile</a>"; // Replace with your profile page link
+            echo "<a href='\\frontend\\profile.php'>Profile</a>"; // Replace with your profile page link
             echo "<a href='\\login-register\\logout.php'>Logout</a>"; // Replace with your logout page link
             echo "</div>";
         }
@@ -69,8 +64,6 @@
         ?>
     </section>
     <section class="options-section">
-
-
         <a href="#" class="option-button" onclick="showSection('sharing')">Sharing Your Room</a>
         <a href="#" class="option-button" onclick="showSection('renting')">Renting a Room</a>
     </section>
@@ -79,48 +72,52 @@
     <section class="output-section" id="sharing-output">
         <h2>Sharing Your Room</h2>
         <!-- Form for listing rooms -->
-        <form class="listing-form" action="#" id="listing-form">
+        <form class="listing-form" id="listing-form" action="listing.php" enctype="multipart/form-data" method="POST">
             <!-- Input for room title -->
             <div class="form-group">
-                <label for="room-title">Room Title</label>
+                <label for="room-title">Room Title:</label>
                 <input type="text" id="room-title" name="room-title" required class="form-input">
             </div>
 
             <!-- Input for room description -->
             <div class="form-group">
-                <label for="room-description">Room Description</label>
+                <label for="room-description">Room Description:</label>
                 <textarea id="room-description" name="room-description" required class="form-input"></textarea>
             </div>
 
             <!-- Dropdown for room location -->
             <div class="form-group">
-                <label for="room-location">Location</label>
+                <label for="room-location">Location:</label>
                 <select id="room-location" name="room-location" required class="form-select">
                     <option value="">Select location</option>
-                    <option value="New York">New York</option>
-                    <option value="Los Angeles">Los Angeles</option>
-                    <option value="Chicago">Chicago</option>
-                    <option value="Miami">Miami</option>
+                    <option value="Mumbai">Mumbai</option>
+                    <option value="Pune">Pune</option>
+                    <option value="Delhi">Delhi</option>
+                    <option value="Kolkata">Kolkata</option>
                     <!-- Add more locations as needed -->
                 </select>
-                <span class="input-icon">📍</span>
             </div>
 
             <!-- Input for room price -->
             <div class="form-group">
-                <label for="room-price">Price (per night)</label>
+                <label for="room-price">Price (per night):</label>
                 <input type="number" id="room-price" name="room-price" required class="form-input">
             </div>
 
             <!-- Input for available dates -->
             <div class="form-group">
-                <label for="available-dates">Available Dates</label>
-                <input type="text" id="available-dates" name="available-dates" required class="form-input" placeholder="e.g., April 1 - 7">
+                <label for="available-dates">Available Dates:</label><br>
+                <label>From:</label>
+                <input type="date" id="check-in" name="check-inn" required class="form-input">
+                <label>To:</label>
+                <input type="date" id="check-out" name="check-outt" required class="form-input">
+                <!-- Container for displaying the number of days -->
+                <p id="number-of-days" style="margin-top: 10px;"></p>
             </div>
 
             <!-- Input for room image -->
             <div class="form-group">
-                <label for="room-image">Room Image</label>
+                <label for="room-image">Room Image:</label>
                 <input type="file" id="room-image" name="room-image" accept="image/*" required class="form-input">
             </div>
 
@@ -136,16 +133,16 @@
 
     <section class="output-section" id="renting-output">
         <h2>Find a Room You Want to Renting</h2>
-        <form class="renting-form" action="#" id="renting-form">
+        <form class="renting-form" id="renting-form" action="fetch_content.php" method="post">
             <!-- Dropdown for searching location -->
             <div class="input-wrapper">
                 <label for="location">Location</label>
                 <select id="location" name="location" class="input-select">
-                    <option value="">Select location</option>
-                    <option value="New York">Mumbai</option>
-                    <option value="Los Angeles">Delhi</option>
-                    <option value="Chicago">Kolkata</option>
-                    <option value="Miami">Pune</option>
+                    <option value="Mumbai">Select location</option>
+                    <option value="Mumbai">Mumbai</option>
+                    <option value="Delhi">Delhi</option>
+                    <option value="Kolkata">Kolkata</option>
+                    <option value="Pune">Pune</option>
                     <!-- Add more locations as needed -->
                 </select>
                 <!-- Icon for location dropdown -->
@@ -181,12 +178,15 @@
             </div>
 
             <!-- Submit button -->
-            <button type="submit" class="submit-button">Search</button>
+            <button type="submit" id="search" class="submit-button">Search</button>
         </form>
-        <div id="search-results" style="margin-top: 20px;">
-            <!-- Search results will be populated here -->
-        </div>
     </section>
+<!-- 
+    <section id="contentSection">
+
+    </section> -->
+
+
 
     <script>
         // JavaScript for toggling the menu
@@ -216,51 +216,55 @@
             showSection('renting');
         };
 
-        // JavaScript code to handle the form submission and display search results
 
-        // Function to simulate fetching search results based on form input
-        function fetchSearchResults(location, persons, checkIn, checkOut) {
-            // Simulated search results (you can replace this with an actual API call)
-            const results = [
-                `Result 1: Room in ${location} for ${persons} person(s) from ${checkIn} to ${checkOut}`,
-                `Result 2: Room in ${location} for ${persons} person(s) from ${checkIn} to ${checkOut}`,
-                `Result 3: Room in ${location} for ${persons} person(s) from ${checkIn} to ${checkOut}`,
-                // Add more results as needed
-            ];
-            return results;
-        }
 
-        // Function to handle form submission
-        function handleFormSubmit(event) {
-            event.preventDefault(); // Prevent default form submission
 
-            // Get form values
-            const location = document.getElementById('location').value;
-            const persons = document.getElementById('persons').value;
-            const checkIn = document.getElementById('check-in').value;
-            const checkOut = document.getElementById('check-out').value;
+        // $(document).ready(function() {
+        //     $('#search').click(function() {
+        //         // Show the section 
+        //         event.preventDefault();
+        //         var formData = $('#renting-form').serialize();
 
-            // Fetch search results based on form values
-            const searchResults = fetchSearchResults(location, persons, checkIn, checkOut);
+        //         $('#contentSection').show();
 
-            // Get the search results container
-            const searchResultsContainer = document.getElementById('search-results');
+        //         // Fetch content using AJAX from PHP script
+        //         $.ajax({
+        //             url: 'fetch_content.php', // URL of the PHP script
+        //             method: 'POST',
+        //             data: formData,
+        //             success: function(data) {
+        //                 // Clear any existing content in the listings section
+        //                 $('#contentSection').empty();
 
-            // Clear any previous results
-            searchResultsContainer.innerHTML = '';
+        //                 // Parse the JSON data returned from the server
+        //                 const roomListings = JSON.parse(data);
 
-            // Populate the search results
-            searchResults.forEach(result => {
-                const resultElement = document.createElement('p');
-                resultElement.textContent = result;
-                searchResultsContainer.appendChild(resultElement);
-            });
-        }
+        //                 // Loop through the room listings and display them
+        //                 roomListings.forEach(room => {
+        //                     // Create HTML for each room listing
+        //                     const roomHtml = `
+        //                         <div class="room-listing">
+        //                             <h3>${room.room_title}</h3>
+        //                             <img src="${room.image}" alt="${room.room_title}" style="width:100px;">
+        //                             <p>${room.room_description}</p>
+        //                             <p>Location: ${room.location}</p>
+        //                             <p>Price: $${room.price}</p>
+        //                             <p>Available: ${room.date_from} to ${room.date_to}</p>
+        //                         </div>
+        //                     `;
 
-        // Attach the form submission event listener
-        document.getElementById('renting-form').addEventListener('submit', handleFormSubmit);
+        //                     // Append the HTML to the listings section
+        //                     $('#contentSection').append(roomHtml);
+        //                 });
+        //             },
+        //             error: function() {
+        //                 // Handle error if something goes wrong
+        //                 $('#contentSection').html('Error fetching room listings.');
+        //             }
+        //         });
+        //     });
+        // });
     </script>
 </body>
-
 
 </html>
