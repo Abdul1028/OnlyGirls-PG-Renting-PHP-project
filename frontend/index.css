@@ -251,7 +251,9 @@
             background-color: #f50057;
             /* Slightly darker pink color */
         }
-
+        hr {
+            border:1.5px solid #f50057;
+          }
         .profile {
             text-align: center;
             font-family: 'Dancing Script', cursive;

@@ -74,3 +74,5 @@ try {
 if (isset($stmt)) {
     $stmt->close();
 }
+?>
+

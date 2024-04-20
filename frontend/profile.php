@@ -47,6 +47,7 @@ if ($user_stmt->fetch()) {
 // Close the user statement
 $user_stmt->close();
 
+
 // Prepare the SQL query to fetch room listings for the specific username
 $query = 'SELECT room_title, room_description, location, price, Date_From, Date_To, image FROM listing WHERE username = ?';
 $stmt = $conn->prepare($query);
@@ -79,8 +80,43 @@ while ($stmt->fetch()) {
 
 // Close the statement and connection
 $stmt->close();
+
+
+$booking_query = 'SELECT room_title, room_description, location, price, number_of_days, Date_From, Date_To, total FROM bookings WHERE username = ?';
+$statment = $conn->prepare($booking_query);
+if ($statment === false) {
+    die('Error preparing the listing statement: ' . $conn->error);
+}
+
+// Bind the username parameter and execute the statement
+$statment->bind_param('s', $username);
+$statment->execute();
+
+// Bind the result columns
+$statment->bind_result($room_title, $room_description, $location, $price, $number_of_days, $Date_From, $Date_To, $total);
+
+// Initialize an array to store the results
+$room_listing = [];
+
+// Fetch the results and store them in the array
+while ($statment->fetch()) {
+    $room_listing[] = [
+        'title' => $room_title,
+        'description' => $room_description,
+        'location' => $location,
+        'price' => $price,
+        'Number_of_days' => $number_of_days,
+        'available_dates_from' => $Date_From,
+        'available_dates_to' => $Date_To,
+        'Total' => $total
+    ];
+}
+
+// Close the statement and connection
+$statment->close();
 $conn->close();
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -95,7 +131,7 @@ $conn->close();
 
 
 <body>
-<header class="header">
+    <header class="header">
         <h1>She Shares Vacation Rentals</h1>
         <?php
 
@@ -170,7 +206,27 @@ $conn->close();
                 <p>No room listings found for your username.</p>
             <?php endif; ?>
         </div>
+        <br>
+        <hr> <br>
+        <div class="room-listings-section">
+            <h2>Your Booked Rooms</h2>
+            <?php if (!empty($room_listing)) : ?>
+                <?php foreach ($room_listing as $listing) : ?>
+                    <div class="room-listing">
+                        <section class="listing">
+                            <h3><?php echo htmlspecialchars($listing['title']); ?></h3>
+                            <p><strong>Description:</strong> <?php echo htmlspecialchars($listing['description']); ?></p>
+                            <p><strong>Location:</strong> <?php echo htmlspecialchars($listing['location']); ?></p>
+                            <p><strong>Price (per night):</strong> <?php echo htmlspecialchars($listing['price']); ?></p>
+                            <p><strong>Available Dates:</strong> <?php echo htmlspecialchars($listing['available_dates_from']); ?> to <?php echo htmlspecialchars($listing['available_dates_to']); ?></p>
 
+                        </section>
+                    </div>
+                <?php endforeach; ?>
+            <?php else : ?>
+                <p>No room listings found for your username.</p>
+            <?php endif; ?>
+        </div>
     </div>
 </body>
 
