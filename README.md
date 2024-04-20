@@ -8,7 +8,6 @@ Lets create an account
 ![image](https://github.com/sohail290204/She-Shares-Vacation-Rentals/assets/94800241/bf419686-abbe-4bfc-8bab-f4a7e5897d79)
 
 Login with the same account
-![image](https://github.com/sohail290204/She-Shares-Vacation-Rentals/assets/94800241/f26e48cb-c705-4dbd-8e90-b7ff96953c5c)
 
 Home page after signing in with account
 ![image](https://github.com/sohail290204/She-Shares-Vacation-Rentals/assets/94800241/3ddebfde-c9d6-448a-82cf-6040f93a6922)
