@@ -1,6 +1,19 @@
-/* Styling for authentication forms */
-body{
-    background-color: whitesmoke;
+:root {
+    --primary-color: #ff80ab;
+    --primary-dark: #ff4081;
+    --secondary-color: #f8bbd0;
+    --background-color: #FCE7EA;
+    --text-color: #333;
+    --white: #fff;
+    --shadow-color: rgba(255, 128, 171, 0.2);
+    --hover-shadow: rgba(255, 128, 171, 0.4);
+}
+
+/* General Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
 }
 .auth-section {
     position: relative;

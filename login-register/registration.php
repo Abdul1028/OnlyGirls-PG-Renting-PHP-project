@@ -159,165 +159,294 @@ $conn->close();
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Register</title>
+    <title>Register - She Shares</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="login.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #ff80ab;
+            --primary-dark: #ff4081;
+            --secondary-color: #f8bbd0;
+            --background-color: #FCE7EA;
+        }
+
+        body {
+            background: linear-gradient(135deg, #ff80ab 0%, #f8bbd0 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+
+        .registration-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            margin: 2rem auto;
+        }
+
+        .form-control, .form-select {
+            border: 2px solid #f8bbd0;
+            border-radius: 10px;
+            padding: 12px;
+            transition: all 0.3s ease;
+            background-color: rgba(248, 187, 208, 0.1);
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #ff4081;
+            box-shadow: 0 0 0 0.25rem rgba(255, 64, 129, 0.25);
+        }
+
+        .profile-upload {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 0 auto 2rem;
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+            background: #f8bbd0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .profile-upload:hover {
+            transform: scale(1.05);
+        }
+
+        .profile-upload img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-upload .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 64, 129, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .profile-upload:hover .overlay {
+            opacity: 1;
+        }
+
+        .btn-register {
+            background: linear-gradient(45deg, #ff4081, #ff80ab);
+            border: none;
+            border-radius: 10px;
+            padding: 12px 30px;
+            color: white;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .btn-register:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 64, 129, 0.4);
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .step {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #f8bbd0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            position: relative;
+            z-index: 1;
+        }
+
+        .step.active {
+            background: #ff4081;
+        }
+
+        .step-line {
+            position: absolute;
+            top: 15px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #f8bbd0;
+            z-index: 0;
+        }
+
+        .form-section {
+            display: none;
+        }
+
+        .form-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
 <body>
-    <div class="container mt-5">
+    <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <div class="card shadow" style=" border-radius: 10px;
-    background-color: #F8BBD0;
-    border: 1px solid #ff80ab; 
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);"
-     >
-                    <div class="card-body">
-                        <h2 class="text-center mb-4">Register</h2>
+                <div class="registration-card">
+                    <h2 class="text-center mb-4">Join She Shares</h2>
+                    
+                    <div class="progress-steps mb-4">
+                        <div class="step-line"></div>
+                        <div class="step active" data-step="1">1</div>
+                        <div class="step" data-step="2">2</div>
+                        <div class="step" data-step="3">3</div>
+                    </div>
 
-                        <?php if (!empty($error)): ?>
-                            <div class="alert alert-danger"><?php echo $error; ?></div>
-                        <?php endif; ?>
-
-                        <div class="image-upload-container">
-                            <label for="profile-image">
-                                <div id="image-preview" class="image-upload-placeholder">
-                                    <i class="fas fa-camera"></i>
+                    <form action="registration.php" method="POST" id="register-form" enctype="multipart/form-data">
+                        <!-- Step 1: Basic Info -->
+                        <div class="form-section active" data-step="1">
+                            <div class="profile-upload" onclick="document.getElementById('profile-image').click()">
+                                <div id="image-preview">
+                                    <i class="fas fa-user-plus fa-2x text-white"></i>
                                 </div>
-                            </label>
-                            <input type="file" 
-                                   id="profile-image" 
-                                   name="profile-image" 
-                                   accept="image/*"
-                                   required
-                                   onchange="previewImage(this)">
-                        </div>
-                        <p class="image-upload-text">Click to upload profile picture</p>
-
-                        <form action="registration.php" method="POST" id="register-form" enctype="multipart/form-data" >
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="name" class="form-label" style="margin: 10px;">Full Name:</label>
-                                    <input type="text" id="name" name="name" required 
-                                           style="padding: 12px;
-                                                  margin-top: 10px;
-                                                  margin-bottom: 10px;
-                                                  background-color: #f096b7;
-                                                  border-radius: 15px;
-                                                  border: none;
-                                                  width: 95%;
-                                                  transition: background-color 0.3s ease;
-                                                  text-align: center;">
-                                </div>
-
-                                <div class="col-md-6 mb-3">
-                                    <label for="register-username" class="form-label" style="margin: 10px;">Username:</label>
-                                    <input type="text" id="register-username" name="register-username" required 
-                                           style="padding: 12px;
-                                                  margin-top: 10px;
-                                                  margin-bottom: 10px;
-                                                  background-color: #f096b7;
-                                                  border-radius: 15px;
-                                                  border: none;
-                                                  width: 95%;
-                                                  transition: background-color 0.3s ease;
-                                                  text-align: center;">
-                                </div>
-
-                                <div class="col-md-6 mb-3">
-                                    <label for="phone" class="form-label">Phone Number:</label>
-                                    <input type="tel" id="phone" name="phone" class="form-control" 
-                                           pattern="[0-9]{10,15}" title="Please enter a valid phone number (10-15 digits)" 
-                                           required placeholder="Enter your phone number"
-                                           style="background-color: #f096b7;">
-                                    <small class="text-muted">Enter numbers only (10-15 digits)</small>
-                                </div>
-
-                                <div class="col-md-6 mb-3">
-                                    <label for="register-email" class="form-label">Email:</label>
-                                    <input type="email" id="register-email" name="register-email" class="form-control" required 
-                                           style="background-color: #f096b7;">
-                                </div>
-
-                                <div class="col-md-6 mb-3">
-                                    <label for="register-password" class="form-label">Password:</label>
-                                    <input type="password" id="register-password" name="register-password" class="form-control" required 
-                                           style="background-color: #f096b7;">
-                                </div>
-
-                                <div class="col-md-6 mb-3">
-                                    <label for="confirm-password" class="form-label">Confirm Password:</label>
-                                    <input type="password" id="confirm-password" name="confirm-password" class="form-control" required 
-                                           style="background-color: #f096b7;">
-                                </div>
-
-                                <div class="col-md-6 mb-3">
-                                    <label for="age" class="form-label">Age:</label>
-                                    <input type="number" id="age" name="age" class="form-control" required 
-                                           style="background-color: #f096b7;">
-                                </div>
-
-                                <div class="col-md-6 mb-3">
-                                    <label for="hometown" class="form-label">Home Town:</label>
-                                    <input type="text" id="hometown" name="hometown" class="form-control" required 
-                                           style="background-color: #f096b7;">
-                                </div>
-
-                                <div class="col-md-4 mb-3">
-                                    <label class="form-label" style="margin: 10px;">Drink:</label>
-                                    <select name="drink" required 
-                                            style="padding: 12px;
-                                                   margin-top: 10px;
-                                                   margin-bottom: 10px;
-                                                   background-color: #f096b7;
-                                                   border-radius: 15px;
-                                                   border: none;
-                                                   width: 95%;
-                                                   transition: background-color 0.3s ease;
-                                                   text-align: center;">
-                                        <option value="single">Single</option>
-                                        <option value="married">Married</option>
-                                    </select>
-                                </div>
-
-                                <div class="col-md-4 mb-3">
-                                    <label class="form-label">Smoke:</label>
-                                    <select name="smoke" class="form-select" required 
-                                            style="background-color: #f096b7;">
-                                        <option value="yes">Yes</option>
-                                        <option value="no">No</option>
-                                    </select>
-                                </div>
-
-                                <div class="col-md-4 mb-3">
-                                    <label class="form-label">Married:</label>
-                                    <select name="married" class="form-select" required 
-                                            style="background-color: #f096b7;">
-                                        <option value="yes">Yes</option>
-                                        <option value="no">No</option>
-                                    </select>
+                                <div class="overlay">
+                                    <i class="fas fa-camera fa-lg text-white"></i>
                                 </div>
                             </div>
+                            <input type="file" id="profile-image" name="profile-image" hidden accept="image/*">
+                            
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" id="name" name="name" placeholder="Full Name" required>
+                                        <label for="name">Full Name</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" id="register-username" name="register-username" placeholder="Username" required>
+                                        <label for="register-username">Username</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-end mt-4">
+                                <button type="button" class="btn btn-register next-step">Next <i class="fas fa-arrow-right ms-2"></i></button>
+                            </div>
+                        </div>
 
-                            <button type="submit" name="register" 
-                                    style="background-color: #ff4081;
-                                           color: white;
-                                           padding: 10px 20px;
-                                           border-radius: 10px;
-                                           border: none;
-                                           margin-top: 10px;
-                                           cursor: pointer;
-                                           transition: background-color 0.3s ease;
-                                           text-align: center;
-                                           width: 100%;">
-                                Register
-                            </button>
-                        </form>
+                        <!-- Step 2: Contact Info -->
+                        <div class="form-section" data-step="2">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="tel" class="form-control" id="phone" name="phone" placeholder="Phone Number" required>
+                                        <label for="phone">Phone Number</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="email" class="form-control" id="register-email" name="register-email" placeholder="Email" required>
+                                        <label for="register-email">Email</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="password" class="form-control" id="register-password" name="register-password" placeholder="Password" required>
+                                        <label for="register-password">Password</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="password" class="form-control" id="confirm-password" name="confirm-password" placeholder="Confirm Password" required>
+                                        <label for="confirm-password">Confirm Password</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between mt-4">
+                                <button type="button" class="btn btn-outline-secondary prev-step"><i class="fas fa-arrow-left me-2"></i> Back</button>
+                                <button type="button" class="btn btn-register next-step">Next <i class="fas fa-arrow-right ms-2"></i></button>
+                            </div>
+                        </div>
 
-                        <p class="text-center mt-3">
-                            Already have an account? <a href="login.php">Login here</a>
-                        </p>
-                    </div>
+                        <!-- Step 3: Personal Details -->
+                        <div class="form-section" data-step="3">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="number" class="form-control" id="age" name="age" placeholder="Age" required>
+                                        <label for="age">Age</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" id="hometown" name="hometown" placeholder="Hometown" required>
+                                        <label for="hometown">Hometown</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-floating">
+                                        <select class="form-select" name="drink" required>
+                                            <option value="">Select...</option>
+                                            <option value="yes">Yes</option>
+                                            <option value="no">No</option>
+                                        </select>
+                                        <label>Do you drink?</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-floating">
+                                        <select class="form-select" name="smoke" required>
+                                            <option value="">Select...</option>
+                                            <option value="yes">Yes</option>
+                                            <option value="no">No</option>
+                                        </select>
+                                        <label>Do you smoke?</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-floating">
+                                        <select class="form-select" name="married" required>
+                                            <option value="">Select...</option>
+                                            <option value="yes">Yes</option>
+                                            <option value="no">No</option>
+                                        </select>
+                                        <label>Marital Status</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between mt-4">
+                                <button type="button" class="btn btn-outline-secondary prev-step"><i class="fas fa-arrow-left me-2"></i> Back</button>
+                                <button type="submit" name="register" class="btn btn-register">
+                                    <i class="fas fa-user-plus me-2"></i> Complete Registration
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <p class="text-center mt-4">
+                        Already have an account? <a href="login.php" class="text-decoration-none">Login here</a>
+                    </p>
                 </div>
             </div>
         </div>
@@ -325,18 +454,97 @@ $conn->close();
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-    function previewImage(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-            
-            reader.onload = function(e) {
-                var preview = document.getElementById('image-preview');
-                preview.innerHTML = `<img src="${e.target.result}" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 3px solid #ff4081;">`;
+        // Image preview functionality
+        document.getElementById('profile-image').addEventListener('change', function(e) {
+            if (e.target.files && e.target.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('image-preview').innerHTML = 
+                        `<img src="${e.target.result}" style="width: 100%; height: 100%; object-fit: cover;">`;
+                }
+                reader.readAsDataURL(e.target.files[0]);
             }
-            
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
+        });
+
+        // Multi-step form functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('register-form');
+            const sections = form.querySelectorAll('.form-section');
+            const steps = document.querySelectorAll('.step');
+
+            // Next button functionality
+            document.querySelectorAll('.next-step').forEach(button => {
+                button.addEventListener('click', function() {
+                    const currentSection = this.closest('.form-section');
+                    const nextSection = currentSection.nextElementSibling;
+                    
+                    // Validate current section
+                    const inputs = currentSection.querySelectorAll('input, select');
+                    let isValid = true;
+                    inputs.forEach(input => {
+                        if (input.required && !input.value) {
+                            isValid = false;
+                            input.classList.add('is-invalid');
+                        } else {
+                            input.classList.remove('is-invalid');
+                        }
+                    });
+
+                    if (!isValid) {
+                        return;
+                    }
+
+                    // Move to next section
+                    currentSection.classList.remove('active');
+                    nextSection.classList.add('active');
+                    
+                    // Update steps
+                    const nextStep = parseInt(nextSection.dataset.step);
+                    steps.forEach(step => {
+                        if (parseInt(step.dataset.step) <= nextStep) {
+                            step.classList.add('active');
+                        }
+                    });
+                });
+            });
+
+            // Previous button functionality
+            document.querySelectorAll('.prev-step').forEach(button => {
+                button.addEventListener('click', function() {
+                    const currentSection = this.closest('.form-section');
+                    const prevSection = currentSection.previousElementSibling;
+                    
+                    currentSection.classList.remove('active');
+                    prevSection.classList.add('active');
+                    
+                    // Update steps
+                    const prevStep = parseInt(prevSection.dataset.step);
+                    steps.forEach(step => {
+                        if (parseInt(step.dataset.step) > prevStep) {
+                            step.classList.remove('active');
+                        }
+                    });
+                });
+            });
+
+            // Form validation on submit
+            form.addEventListener('submit', function(e) {
+                const inputs = form.querySelectorAll('input, select');
+                let isValid = true;
+                inputs.forEach(input => {
+                    if (input.required && !input.value) {
+                        isValid = false;
+                        input.classList.add('is-invalid');
+                    } else {
+                        input.classList.remove('is-invalid');
+                    }
+                });
+
+                if (!isValid) {
+                    e.preventDefault();
+                }
+            });
+        });
     </script>
 </body>
 </html>
