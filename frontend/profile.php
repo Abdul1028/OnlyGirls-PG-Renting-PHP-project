@@ -122,112 +122,192 @@ $conn->close();
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile and Room Listings</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Profile - She Shares</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #fce4ec;
+        }
+        .profile-card {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(255, 128, 171, 0.2);
+            border: none;
+        }
+        .profile-header {
+            background: linear-gradient(135deg, #ff80ab 0%, #f8bbd0 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px 15px 0 0;
+            text-align: center;
+        }
+        .listing-card {
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+        .listing-card:hover {
+            transform: translateY(-5px);
+        }
+        .nav-pills .nav-link.active {
+            background-color: #ff4081;
+        }
+        .nav-pills .nav-link {
+            color: #ff4081;
+        }
+        .badge-pink {
+            background-color: #ff4081;
+            color: white;
+        }
+    </style>
 </head>
-<link rel="stylesheet" href="index.css">
-
 
 <body>
-    <header class="header">
-        <h1>She Shares Vacation Rentals</h1>
-        <?php
 
-        // Check if the user is logged in
-        if (!isset($_SESSION['user_logged_in']) || $_SESSION['user_logged_in'] !== true) {
-            // The user is not logged in, display login and register buttons
-            echo "<div class='auth-buttons'>";
-            echo "<a href='/login-register/login.php'>Login</a>";
-            echo "<a href='/login-register/registration.php'>Register</a>";
-            echo "</div>";
-        } else {
-            // The user is logged in, do not display the buttons
-            // You may also want to display a logout button or user profile link instead
-            echo "<div class='auth-buttons'>";
-            echo "<a href='\\frontend\\index.php'>Home</a>"; // Replace with your profile page link
-            echo "<a href='\\login-register\\logout.php'>Logout</a>"; // Replace with your logout page link
-            echo "</div>";
-        }
-        ?>
-
-        <!-- Hamburger menu -->
-        <div class="hamburger" id="hamburger" onclick="toggleMenu()">
-            <div></div>
-            <div></div>
-            <div></div>
-        </div>
-    </header>
-
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
     <div class="container">
-        <section class="profile">
-            <div class="profile-section">
-                <div class="h">
-                    <h1>Your Profile</h1>
-                </div>
-                <div class="first">
-                    <p><strong>Name:</strong> <?php echo htmlspecialchars($user_data['name']); ?></p>
-                    <p><strong>Email:</strong> <?php echo htmlspecialchars($user_data['email']); ?></p>
-                    <p><strong>Phone Number:</strong> <?php echo htmlspecialchars($user_data['phone_number']); ?></p>
-                    <p><strong>Age:</strong> <?php echo htmlspecialchars($user_data['age']); ?></p>
-                </div>
-                <div class="second">
-
-                    <p><strong>Married:</strong> <?php echo htmlspecialchars($user_data['Married']); ?></p>
-                    <p><strong>Smoking:</strong> <?php echo htmlspecialchars($user_data['smoking']); ?></p>
-                    <p><strong>Drinking:</strong> <?php echo htmlspecialchars($user_data['drinking']); ?></p>
-                </div>
-                <!-- <p><strong>Town:</strong> <?php echo htmlspecialchars($user_data['town']); ?></p> -->
-            </div>
-        </section>
-
-        <div class="room-listings-section">
-            <h2>Your Room Listings</h2>
-
-            <!-- Display room listings -->
-            <?php if (!empty($room_listings)) : ?>
-                <?php foreach ($room_listings as $listing) : ?>
-                    <div class="room-listing">
-                        <section class="listing">
-                            <div class="image-item">
-                                <img src="data:image/jpeg;base64,<?php echo base64_encode($listing['image']); ?>" alt="Room Image">
-                            </div>
-                            <h3><?php echo htmlspecialchars($listing['title']); ?></h3>
-                            <p><strong>Description:</strong> <?php echo htmlspecialchars($listing['description']); ?></p>
-                            <p><strong>Location:</strong> <?php echo htmlspecialchars($listing['location']); ?></p>
-                            <p><strong>Price (per night):</strong> <?php echo htmlspecialchars($listing['price']); ?></p>
-                            <p><strong>Available Dates:</strong> <?php echo htmlspecialchars($listing['available_dates_from']); ?> to <?php echo htmlspecialchars($listing['available_dates_to']); ?></p>
-
-                        </section>
-                    </div>
-                <?php endforeach; ?>
-            <?php else : ?>
-                <p>No room listings found for your username.</p>
-            <?php endif; ?>
-        </div>
-        <br>
-        <hr> <br>
-        <div class="room-listings-section">
-            <h2>Your Booked Rooms</h2>
-            <?php if (!empty($room_listing)) : ?>
-                <?php foreach ($room_listing as $listing) : ?>
-                    <div class="room-listing">
-                        <section class="listing">
-                            <h3><?php echo htmlspecialchars($listing['title']); ?></h3>
-                            <p><strong>Description:</strong> <?php echo htmlspecialchars($listing['description']); ?></p>
-                            <p><strong>Location:</strong> <?php echo htmlspecialchars($listing['location']); ?></p>
-                            <p><strong>Price (per night):</strong> <?php echo htmlspecialchars($listing['price']); ?></p>
-                            <p><strong>Available Dates:</strong> <?php echo htmlspecialchars($listing['available_dates_from']); ?> to <?php echo htmlspecialchars($listing['available_dates_to']); ?></p>
-
-                        </section>
-                    </div>
-                <?php endforeach; ?>
-            <?php else : ?>
-                <p>No room listings found for your username.</p>
-            <?php endif; ?>
+        <a class="navbar-brand" href="#">
+            <i class="fas fa-home text-pink"></i> She Shares
+        </a>
+        <div class="d-flex">
+            <a href="../frontend/index.php" class="btn btn-outline-pink me-2">Home</a>
+            <a href="../login-register/logout.php" class="btn btn-pink">Logout</a>
         </div>
     </div>
+</nav>
+
+<div class="container py-5">
+    <!-- Profile Section -->
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card profile-card">
+                <div class="profile-header">
+                    <i class="fas fa-user-circle fa-4x mb-3"></i>
+                    <h3><?php echo htmlspecialchars($user_data['name']); ?></h3>
+                    <p class="mb-0"><i class="fas fa-map-marker-alt me-2"></i><?php echo htmlspecialchars($user_data['town']); ?></p>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-around mb-4">
+                        <span class="badge rounded-pill badge-pink">
+                            <i class="fas <?php echo $user_data['smoking'] === 'yes' ? 'fa-smoking' : 'fa-smoking-ban'; ?>"></i>
+                            <?php echo ucfirst($user_data['smoking']); ?>
+                        </span>
+                        <span class="badge rounded-pill badge-pink">
+                            <i class="fas <?php echo $user_data['drinking'] === 'yes' ? 'fa-wine-glass' : 'fa-ban'; ?>"></i>
+                            <?php echo ucfirst($user_data['drinking']); ?>
+                        </span>
+                        <span class="badge rounded-pill badge-pink">
+                            <i class="fas <?php echo $user_data['Married'] === 'yes' ? 'fa-ring' : 'fa-heart'; ?>"></i>
+                            <?php echo ucfirst($user_data['Married']); ?>
+                        </span>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <i class="fas fa-envelope me-2"></i> <?php echo htmlspecialchars($user_data['email']); ?>
+                        </li>
+                        <li class="list-group-item">
+                            <i class="fas fa-phone me-2"></i> <?php echo htmlspecialchars($user_data['phone_number']); ?>
+                        </li>
+                        <li class="list-group-item">
+                            <i class="fas fa-birthday-cake me-2"></i> Age: <?php echo htmlspecialchars($user_data['age']); ?>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <ul class="nav nav-pills mb-4" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#listings">My Listings</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#bookings">My Bookings</button>
+                </li>
+            </ul>
+
+            <div class="tab-content">
+                <!-- Listings Tab -->
+                <div class="tab-pane fade show active" id="listings">
+                    <?php if (!empty($room_listings)) : ?>
+                        <div class="row g-4">
+                            <?php foreach ($room_listings as $listing) : ?>
+                                <div class="col-md-6">
+                                    <div class="card listing-card h-100">
+                                        <img src="data:image/jpeg;base64,<?php echo base64_encode($listing['image']); ?>" 
+                                             class="card-img-top" alt="Room Image" 
+                                             style="height: 200px; object-fit: cover;">
+                                        <div class="card-body">
+                                            <h5 class="card-title"><?php echo htmlspecialchars($listing['title']); ?></h5>
+                                            <p class="card-text"><?php echo htmlspecialchars($listing['description']); ?></p>
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <span class="badge bg-primary">₹<?php echo htmlspecialchars($listing['price']); ?>/night</span>
+                                                <span class="text-muted"><i class="fas fa-map-marker-alt"></i> <?php echo htmlspecialchars($listing['location']); ?></span>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer bg-white">
+                                            <small class="text-muted">
+                                                Available: <?php echo date('M d', strtotime($listing['available_dates_from'])); ?> - 
+                                                <?php echo date('M d, Y', strtotime($listing['available_dates_to'])); ?>
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php else : ?>
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i> You haven't listed any rooms yet.
+                        </div>
+                    <?php endif; ?>
+                </div>
+
+                <!-- Bookings Tab -->
+                <div class="tab-pane fade" id="bookings">
+                    <?php if (!empty($room_listing)) : ?>
+                        <div class="row g-4">
+                            <?php foreach ($room_listing as $listing) : ?>
+                                <div class="col-md-6">
+                                    <div class="card listing-card h-100">
+                                        <div class="card-body">
+                                            <h5 class="card-title"><?php echo htmlspecialchars($listing['title']); ?></h5>
+                                            <p class="card-text"><?php echo htmlspecialchars($listing['description']); ?></p>
+                                            <ul class="list-unstyled">
+                                                <li><i class="fas fa-map-marker-alt me-2"></i><?php echo htmlspecialchars($listing['location']); ?></li>
+                                                <li><i class="fas fa-money-bill me-2"></i>₹<?php echo htmlspecialchars($listing['price']); ?>/night</li>
+                                                <li><i class="fas fa-calendar me-2"></i><?php echo htmlspecialchars($listing['Number_of_days']); ?> days</li>
+                                            </ul>
+                                            <div class="alert alert-success mb-0">
+                                                Total Amount: ₹<?php echo htmlspecialchars($listing['Total']); ?>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer bg-white">
+                                            <small class="text-muted">
+                                                Booked: <?php echo date('M d', strtotime($listing['available_dates_from'])); ?> - 
+                                                <?php echo date('M d, Y', strtotime($listing['available_dates_to'])); ?>
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php else : ?>
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i> You haven't booked any rooms yet.
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

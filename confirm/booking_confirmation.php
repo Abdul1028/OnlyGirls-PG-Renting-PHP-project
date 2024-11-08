@@ -57,7 +57,7 @@
             $username = $_SESSION['username'];
             $host = 'localhost';
             $user = 'root';
-            $password = '';
+            $password = 'Pass@123';
             $dbname = 'roomrental';
 
             // Connect to the database

@@ -47,8 +47,8 @@
         // The user is logged in, do not display the buttons
         // You may also want to display a logout button or user profile link instead
         echo "<div class='auth-buttons'>";
-        echo "<a href='\\frontend\\profile.php'>Profile</a>"; // Replace with your profile page link
-        echo "<a href='\\login-register\\logout.php'>Logout</a>"; // Replace with your logout page link
+        echo "<a href='\\She-Shares-Vacation-Rentals\\frontend\\profile.php'>Profile</a>"; // Replace with your profile page link
+        echo "<a href='\\She-Shares-Vacation-Rentals\\login-register\\logout.php'>Logout</a>"; // Replace with your logout page link
         echo "</div>";
     }
     ?>

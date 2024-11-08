@@ -44,8 +44,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['user_logged_in'] = true;
             $_SESSION['username'] = $username;
 
-            // Redirect the user to a secure page
-            header('Location: \\frontend\\index.php');
+            // Include the alert component
+            require_once 'alert.php';
+            
+            // Show the alert
+            showAlert(
+                'Login Successful!', 
+                'Welcome back to She Shares!', 
+                '../frontend/index.php'
+            );
             exit;
         } else {
             // Incorrect password
@@ -100,7 +107,7 @@ $conn->close();
             </form>
 
             <!-- Link to registration page -->
-            <p class="auth-link">Don't have an account? <a href="register.php">Register here</a>.</p>
+            <p class="auth-link">Don't have an account? <a href="registration.php">Register here</a>.</p>
         </section>
     </div>
 </body>

@@ -48,7 +48,7 @@ if (!$stmt) {
 // Execute the statement and check if it was successful
 if ($stmt->execute()) {
     // echo "Data inserted successfully.";
-    header("Location: \\frontend\\index.php");
+    header("Location: \\she-shares-vacation-rentals\\frontend\\index.php");
 } else {
     echo "Error inserting data: " . $stmt->error;
 }

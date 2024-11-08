@@ -64,7 +64,7 @@ try {
     $stmt->execute();
 
     // Booking successful, redirect to the confirmation page
-    header('Location: /confirm/booking_confirmation.php');
+    header('Location: /She-Shares-Vacation-Rentals/confirm/booking_confirmation.php');
     exit;
 } catch (Exception $e) {
     $errors[] = 'Failed to save booking: ' . $e->getMessage();

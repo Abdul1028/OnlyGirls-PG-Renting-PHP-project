@@ -6,264 +6,329 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>She Shares Vacation Rentals</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Animate.css for animations -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="index.css">
-    <style>
-        /* Reset some default styles */
-    </style>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 
 <body>
-    <header class="header">
-        <h1>She Shares Vacation Rentals</h1>
-        <?php
-        session_start();
-
-        // Check if the user is logged in
-        if (!isset($_SESSION['user_logged_in']) || $_SESSION['user_logged_in'] !== true) {
-            // The user is not logged in, display login and register buttons
-            echo "<div class='auth-buttons'>";
-            echo "<a href='/login-register/login.php'>Login</a>";
-            echo "<a href='/login-register/registration.php'>Register</a>";
-            echo "</div>";
-        } else {
-            // The user is logged in, do not display the buttons
-            // You may also want to display a logout button or user profile link instead
-            echo "<div class='auth-buttons'>";
-            echo "<a href='\\frontend\\profile.php'>Profile</a>"; // Replace with your profile page link
-            echo "<a href='\\login-register\\logout.php'>Logout</a>"; // Replace with your logout page link
-            echo "</div>";
-        }
-        ?>
-
-        <!-- Hamburger menu -->
-        <div class="hamburger" id="hamburger" onclick="toggleMenu()">
-            <div></div>
-            <div></div>
-            <div></div>
+    <?php if (isset($_SESSION['registration_success'])): ?>
+        <div class="alert alert-success alert-dismissible fade show text-center" 
+             role="alert" 
+             style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 1050; min-width: 300px; background-color: #ff80ab; color: white; border: none;">
+            <strong>Welcome to She Shares!</strong> Your registration was successful.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-    </header>
+        <script>
+            setTimeout(function() {
+                document.querySelector('.alert').remove();
+            }, 5000); // Alert will disappear after 5 seconds
+        </script>
+        <?php unset($_SESSION['registration_success']); ?>
+    <?php endif; ?>
+    
+    <!-- Navbar -->
+    <nav style="background-color: #f8bbd0; position: sticky; top: 0; z-index: 1000; transition: all 0.3s ease" class="navbar navbar-expand-lg navbar-light animate__animated animate__fadeIn mb-3">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Only Girlsss</a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span> 
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Safety</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Adventure</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Community</a>
+                    </li>
+                </ul>
+                
+                <div class="nav-auth-buttons">
+                    <?php
+                    session_start();
+                    if (!isset($_SESSION['user_logged_in']) || $_SESSION['user_logged_in'] !== true) {
+                        echo '<a href="/She-Shares-Vacation-Rentals/login-register/login.php" class="btn btn-outline-light me-2">Login</a>';
+                        echo '<a href="/She-Shares-Vacation-Rentals/login-register/registration.php" class="btn btn-light">Register</a>';
+                    } else {
+                        echo '<a href="\\She-Shares-Vacation-Rentals\\frontend\\profile.php" class="btn btn-outline-light me-2">Profile</a>';
+                        echo '<a href="\\She-Shares-Vacation-Rentals\\login-register\\logout.php" class="btn btn-light">Logout</a>';
+                    }
+                    ?>
+                </div>
+            </div>
+        </div>
+    </nav>
 
-    <!-- Slide-down menu -->
-    <div class="menu" id="menu">
-        <a href="#">Home</a>
-        <a href="#">Welcome</a>
-        <a href="#">Safety</a>
-        <a href="#">Adventure</a>
-        <a href="#">Community</a>
+    <!-- Welcome Section -->
+
+
+
+    <!-- Welcome Section -->
+<section class="welcome-section py-5 animate__animated animate__fadeIn" 
+    style="background: linear-gradient(135deg, #ff80ab 0%, #f8bbd0 100%); color: white; padding: 4rem 0 !important; margin-bottom: 2rem; border-radius: 0 0 50px 50px; box-shadow: 0 4px 20px rgba(255, 128, 171, 0.3);">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8 mx-auto text-center">
+                <?php
+                if (!isset($_SESSION['user_logged_in']) || $_SESSION['user_logged_in'] !== true) {
+                    echo '
+                    <h1 class="display-4 mb-4" style="font-family: \'Dancing Script\', cursive; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.1);">
+                        Welcome to She Shares
+                    </h1>
+                    ';
+                } else {
+                    $username = $_SESSION['username'];
+                    echo "
+                    <h1 class='display-4 mb-4' style='font-family: \"Dancing Script\", cursive; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.1);'>
+                        Welcome back, $username!
+                    </h1>
+                    ";
+                }
+                ?>
+                <p class="lead mb-4" style="font-size: 1.25rem; font-weight: 300; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);">
+                    Your safe and secure PG accommodation platform exclusively for women
+                </p>
+                <div class="row justify-content-center mb-4">
+                    <div class="col-md-4 mb-3">
+                        <div style="background: rgba(255,255,255,0.2); padding: 1rem; border-radius: 15px; backdrop-filter: blur(5px);">
+                            <i class="fas fa-shield-alt mb-2" style="font-size: 2rem;"></i>
+                            <h5>Safe & Secure</h5>
+                            <p class="small">Verified accommodations for women</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div style="background: rgba(255,255,255,0.2); padding: 1rem; border-radius: 15px; backdrop-filter: blur(5px);">
+                            <i class="fas fa-female mb-2" style="font-size: 2rem;"></i>
+                            <h5>Women Only</h5>
+                            <p class="small">Exclusive female community</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div style="background: rgba(255,255,255,0.2); padding: 1rem; border-radius: 15px; backdrop-filter: blur(5px);">
+                            <i class="fas fa-home mb-2" style="font-size: 2rem;"></i>
+                            <h5>Comfortable Stay</h5>
+                            <p class="small">Handpicked PG accommodations</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <a href="#" class="btn btn-light btn-lg me-3" 
+                        style="background: white; color: #ff80ab; border: none; padding: 0.8rem 2rem; border-radius: 25px; font-weight: 600; transition: all 0.3s ease;"
+                        onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 6px 20px rgba(255,255,255,0.3)';"
+                        onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+                        Learn More
+                    </a>
+                    <a href="#" class="btn btn-outline-light btn-lg" 
+                        style="border: 2px solid white; padding: 0.8rem 2rem; border-radius: 25px; font-weight: 600; transition: all 0.3s ease;"
+                        onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 6px 20px rgba(255,255,255,0.3)';"
+                        onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+                        Contact Us
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
-    <section class="option-section">
-        <?php
+</section>
 
-        if (!isset($_SESSION['user_logged_in']) || $_SESSION['user_logged_in'] !== true) {
-            // The user is not logged in, display login and register buttons
-
-        } else {
-            $usernaem = $_SESSION['username'];
-            echo "<h2>Welcome $usernaem</h2>";
-        }
-        ?>
-    </section>
-    <section class="options-section">
-        <a href="#" class="option-button" onclick="showSection('sharing')">Sharing Your Room</a>
-        <a href="#" class="option-button" onclick="showSection('renting')">Renting a Room</a>
-    </section>
-
-    <!-- Output sections -->
-    <section class="output-section" id="sharing-output">
-        <h2>Sharing Your Room</h2>
-        <!-- Form for listing rooms -->
-        <form class="listing-form" id="listing-form" action="listing.php" enctype="multipart/form-data" method="POST">
-            <!-- Input for room title -->
-            <div class="form-group">
-                <label for="room-title">Room Title:</label>
-                <input type="text" id="room-title" name="room-title" required class="form-input">
+    <!-- Options Section -->
+    <section class="options-section animate__animated animate__fadeIn">
+        <div class="container py-4">
+            <div class="row justify-content-center g-4">
+                <div class="col-md-6 col-lg-5">
+                    <div style="background-color: #f8bbd0; padding: 2rem; border-radius: 20px; box-shadow: 0 4px 15px var(--shadow-color); border: 4px solid white;" class="option-card-custom animate__animated animate__fadeInLeft" onclick="showSection('sharing')"
+                    onmouseover="this.style.transform='scale(1.5)'; this.style.boxShadow='0 12px 30px rgba(255, 128, 171, 0.5)';"
+                    onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 15px rgba(255, 128, 171, 0.2)';"
+                    >
+                        <i class="fas fa-home"></i>
+                        <h3>Share Your Room</h3>
+                        <p>List your space for other travelers</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-5">
+                    <div  style="background-color: #f8bbd0; border: 4px solid white; padding: 2rem; border-radius: 20px;" class="option-card-custom animate__animated animate__fadeInRight" onclick="showSection('renting')"
+                    
+                    onmouseover="this.style.transform='scale(1.5)'; this.style.boxShadow='0 12px 30px rgba(255, 128, 171, 0.5)';"
+                    onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 15px rgba(255, 128, 171, 0.2)';"
+                
+                    >
+                        <i class="fas fa-search"></i>
+                        <h3>Find a Room</h3>
+                        <p>Discover your perfect stay</p>
+                    </div>
+                </div>
             </div>
-
-            <!-- Input for room description -->
-            <div class="form-group">
-                <label for="room-description">Room Description:</label>
-                <textarea id="room-description" name="room-description" required class="form-input"></textarea>
-            </div>
-
-            <!-- Dropdown for room location -->
-            <div class="form-group">
-                <label for="room-location">Location:</label>
-                <select id="room-location" name="room-location" required class="form-select">
-                    <option value="">Select location</option>
-                    <option value="Mumbai">Mumbai</option>
-                    <option value="Pune">Pune</option>
-                    <option value="Delhi">Delhi</option>
-                    <option value="Kolkata">Kolkata</option>
-                    <!-- Add more locations as needed -->
-                </select>
-            </div>
-
-            <!-- Input for room price -->
-            <div class="form-group">
-                <label for="room-price">Price (per night):</label>
-                <input type="number" id="room-price" name="room-price" required class="form-input">
-            </div>
-
-            <!-- Input for available dates -->
-            <div class="form-group">
-                <label for="available-dates">Available Dates:</label><br>
-                <label>From:</label>
-                <input type="date" id="check-in" name="check-inn" required class="form-input">
-                <label>To:</label>
-                <input type="date" id="check-out" name="check-outt" required class="form-input">
-                <!-- Container for displaying the number of days -->
-                <p id="number-of-days" style="margin-top: 10px;"></p>
-            </div>
-
-            <!-- Input for room image -->
-            <div class="form-group">
-                <label for="room-image">Room Image:</label>
-                <input type="file" id="room-image" name="room-image" accept="image/*" required class="form-input">
-            </div>
-
-            <!-- Submit button -->
-            <button type="submit" class="submit-button">List Room</button>
-        </form>
-
-        <!-- Container for listed rooms -->
-        <div id="listed-rooms" style="margin-top: 20px;">
-            <!-- Listed rooms will be displayed here -->
         </div>
     </section>
 
-    <section class="output-section" id="renting-output">
-        <h2>Find a Room You Want to Renting</h2>
-        <form class="renting-form" id="renting-form" action="fetch_content.php" method="post">
-            <!-- Dropdown for searching location -->
-            <div class="input-wrapper">
-                <label for="location">Location</label>
-                <select id="location" name="location" class="input-select">
-                    <option value="Mumbai">Select location</option>
-                    <option value="Mumbai">Mumbai</option>
-                    <option value="Delhi">Delhi</option>
-                    <option value="Kolkata">Kolkata</option>
-                    <option value="Pune">Pune</option>
-                    <!-- Add more locations as needed -->
-                </select>
-                <!-- Icon for location dropdown -->
-                <span class="input-icon">📍</span>
-            </div>
+    <!-- Sharing Section -->
+    <section class="output-section" id="sharing-output">
+        <div class="container">
+            <h2 class="text-center mb-5 animate__animated animate__fadeIn">Share Your Room</h2>
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="form-container animate__animated animate__fadeInUp">
+                        <form class="listing-form" id="listing-form" action="listing.php" enctype="multipart/form-data" method="POST">
+                            <div class="mb-4">
+                                <label class="form-label">Room Title</label>
+                                <input type="text" class="form-control" name="room-title" required>
+                            </div>
 
-            <!-- Dropdown for number of persons -->
-            <div class="input-wrapper">
-                <label for="persons">Number of Persons</label>
-                <select id="persons" name="persons" class="input-select">
-                    <option value="">Select number of persons</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <!-- Add more options as needed -->
-                </select>
-                <!-- Icon for persons dropdown -->
-                <span class="input-icon">👤</span>
-            </div>
+                            <div class="mb-4">
+                                <label class="form-label">Description</label>
+                                <textarea class="form-control" name="room-description" rows="4" required></textarea>
+                            </div>
 
-            <!-- Input for check-in date -->
-            <div class="input-wrapper">
-                <label for="check-in">Check-in Date</label>
-                <input type="date" id="check-in" name="check-in" required class="input-date">
-            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label">Location</label>
+                                    <select class="form-select" name="room-location" required>
+                                        <option value="">Select location</option>
+                                        <option value="Mumbai">Mumbai</option>
+                                        <option value="Pune">Pune</option>
+                                        <option value="Delhi">Delhi</option>
+                                        <option value="Kolkata">Kolkata</option>
+                                    </select>
+                                </div>
 
-            <!-- Input for check-out date -->
-            <div class="input-wrapper">
-                <label for="check-out">Check-out Date</label>
-                <input type="date" id="check-out" name="check-out" required class="input-date">
-            </div>
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label">Price per Night</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">₹</span>
+                                        <input type="number" class="form-control" name="room-price" required>
+                                    </div>
+                                </div>
+                            </div>
 
-            <!-- Submit button -->
-            <button type="submit" id="search" class="submit-button">Search</button>
-        </form>
+                            <div class="row">
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label">Available From</label>
+                                    <input type="date" class="form-control" name="check-inn" required>
+                                </div>
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label">Available To</label>
+                                    <input type="date" class="form-control" name="check-outt" required>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label">Room Images</label>
+                                <input type="file" class="form-control" name="room-image" accept="image/*" required>
+                            </div>
+
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary btn-lg">List Your Room</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
-<!-- 
-    <section id="contentSection">
 
-    </section> -->
+    <!-- Renting Section -->
+    <section class="output-section" id="renting-output">
+        <div class="container">
+            <h2 class="text-center mb-5 animate__animated animate__fadeIn">Find Your Perfect Stay</h2>
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="search-container animate__animated animate__fadeInUp">
+                        <form class="renting-form" id="renting-form" action="fetch_content.php" method="post">
+                            <div class="row g-4">
+                                <div class="col-md-6">
+                                    <label class="form-label">Location</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                                        <select class="form-select" name="location" required>
+                                            <option value="">Select location</option>
+                                            <option value="Mumbai">Mumbai</option>
+                                            <option value="Delhi">Delhi</option>
+                                            <option value="Kolkata">Kolkata</option>
+                                            <option value="Pune">Pune</option>
+                                        </select>
+                                    </div>
+                                </div>
 
+                                <div class="col-md-6">
+                                    <label class="form-label">Guests</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                        <select class="form-select" name="persons" required>
+                                            <option value="">Select guests</option>
+                                            <option value="1">1 Guest</option>
+                                            <option value="2">2 Guests</option>
+                                            <option value="3">3 Guests</option>
+                                            <option value="4">4 Guests</option>
+                                        </select>
+                                    </div>
+                                </div>
 
+                                <div class="col-md-6">
+                                    <label class="form-label">Check In</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                                        <input type="date" class="form-control" name="check-in" required>
+                                    </div>
+                                </div>
 
+                                <div class="col-md-6">
+                                    <label class="form-label">Check Out</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                                        <input type="date" class="form-control" name="check-out" required>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 text-center">
+                                    <button type="submit" class="btn btn-primary btn-lg" id="search">
+                                        <i class="fas fa-search me-2"></i>Search Rooms
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bootstrap JS and Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    
+    <!-- Custom JavaScript -->
     <script>
-        // JavaScript for toggling the menu
-        function toggleMenu() {
-            var menu = document.getElementById('menu');
-            if (menu.style.display === 'none' || menu.style.display === '') {
-                menu.style.display = 'block';
-            } else {
-                menu.style.display = 'none';
-            }
-        }
-
-        // Hide the menu by default
-        document.getElementById('menu').style.display = 'none';
-
         function showSection(sectionId) {
-            // Hide all output sections
-            document.getElementById('sharing-output').style.display = 'none';
-            document.getElementById('renting-output').style.display = 'none';
+            // Add fade out animation to all sections
+            document.querySelectorAll('.output-section').forEach(section => {
+                section.style.display = 'none';
+                section.classList.remove('animate__fadeIn');
+            });
 
-            // Show the selected section
-            document.getElementById(sectionId + '-output').style.display = 'block';
+            // Show and animate the selected section
+            const selectedSection = document.getElementById(sectionId + '-output');
+            selectedSection.style.display = 'block';
+            selectedSection.classList.add('animate__animated', 'animate__fadeIn');
         }
 
-        // Automatically show the "Sharing Your Room" content by default
+        // Show renting section by default
         window.onload = function() {
             showSection('renting');
         };
-
-
-
-
-        // $(document).ready(function() {
-        //     $('#search').click(function() {
-        //         // Show the section 
-        //         event.preventDefault();
-        //         var formData = $('#renting-form').serialize();
-
-        //         $('#contentSection').show();
-
-        //         // Fetch content using AJAX from PHP script
-        //         $.ajax({
-        //             url: 'fetch_content.php', // URL of the PHP script
-        //             method: 'POST',
-        //             data: formData,
-        //             success: function(data) {
-        //                 // Clear any existing content in the listings section
-        //                 $('#contentSection').empty();
-
-        //                 // Parse the JSON data returned from the server
-        //                 const roomListings = JSON.parse(data);
-
-        //                 // Loop through the room listings and display them
-        //                 roomListings.forEach(room => {
-        //                     // Create HTML for each room listing
-        //                     const roomHtml = `
-        //                         <div class="room-listing">
-        //                             <h3>${room.room_title}</h3>
-        //                             <img src="${room.image}" alt="${room.room_title}" style="width:100px;">
-        //                             <p>${room.room_description}</p>
-        //                             <p>Location: ${room.location}</p>
-        //                             <p>Price: $${room.price}</p>
-        //                             <p>Available: ${room.date_from} to ${room.date_to}</p>
-        //                         </div>
-        //                     `;
-
-        //                     // Append the HTML to the listings section
-        //                     $('#contentSection').append(roomHtml);
-        //                 });
-        //             },
-        //             error: function() {
-        //                 // Handle error if something goes wrong
-        //                 $('#contentSection').html('Error fetching room listings.');
-        //             }
-        //         });
-        //     });
-        // });
     </script>
 </body>
 
