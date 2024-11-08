@@ -20,30 +20,47 @@ try {
 
     // Get search parameters
     $location = isset($_GET['location']) ? $conn->real_escape_string($_GET['location']) : '';
-    $min_price = isset($_GET['min_price']) ? (int)$_GET['min_price'] : 0;
-    $max_price = isset($_GET['max_price']) ? (int)$_GET['max_price'] : 0;
+    $min_price = isset($_GET['min_price']) && $_GET['min_price'] !== '' ? (int)$_GET['min_price'] : 0;
+    $max_price = isset($_GET['max_price']) && $_GET['max_price'] !== '' ? (int)$_GET['max_price'] : 0;
     $check_in = isset($_GET['check_in']) ? $conn->real_escape_string($_GET['check_in']) : '';
     $check_out = isset($_GET['check_out']) ? $conn->real_escape_string($_GET['check_out']) : '';
+    $sort_by = isset($_GET['sort_by']) ? $_GET['sort_by'] : '';
 
     // Build query
-    $query = "SELECT * FROM listing WHERE 1=1";
+    $query = "SELECT l.*, li.image 
+              FROM listing l 
+              LEFT JOIN listing_images li ON l.id = li.listing_id 
+              WHERE 1=1";
 
     if (!empty($location)) {
-        $query .= " AND Location LIKE '%$location%'";
+        $query .= " AND l.Location LIKE '%$location%'";
     }
 
     if ($min_price > 0) {
-        $query .= " AND Price >= $min_price";
+        $query .= " AND l.Price >= $min_price";
     }
 
     if ($max_price > 0) {
-        $query .= " AND Price <= $max_price";
+        $query .= " AND l.Price <= $max_price";
     }
 
     if (!empty($check_in) && !empty($check_out)) {
-        $query .= " AND (('$check_in' BETWEEN Date_From AND Date_To) 
-                   OR ('$check_out' BETWEEN Date_From AND Date_To))";
+        $query .= " AND (('$check_in' BETWEEN l.Date_From AND l.Date_To) 
+                   OR ('$check_out' BETWEEN l.Date_From AND l.Date_To))";
     }
+
+    // Group by listing id to get one image per listing
+    $query .= " GROUP BY l.id";
+
+    // Add sorting
+    if ($sort_by == 'price_asc') {
+        $query .= " ORDER BY l.Price ASC";
+    } elseif ($sort_by == 'price_desc') {
+        $query .= " ORDER BY l.Price DESC";
+    }
+
+    // Add this debug line to check the query
+    // echo "<p>Debug Query: " . $query . "</p>";
 
     // Execute query
     $result = $conn->query($query);
@@ -92,6 +109,14 @@ try {
         .room-image {
             height: 200px;
             object-fit: cover;
+            background-color: #f8f9fa;
+        }
+
+        .room-image.no-image {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #adb5bd;
         }
 
         .room-details {
@@ -142,6 +167,8 @@ try {
             border-radius: 15px;
             margin-bottom: 30px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 20px;
         }
 
         .section-title {
@@ -162,6 +189,24 @@ try {
             font-size: 3rem;
             color: #ff4081;
             margin-bottom: 20px;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #ff4081;
+            box-shadow: 0 0 0 0.2rem rgba(255, 64, 129, 0.25);
+        }
+
+        .form-control::placeholder {
+            color: #adb5bd;
+        }
+
+        .price-range-inputs {
+            display: flex;
+            gap: 10px;
+        }
+
+        .price-range-inputs input {
+            width: 50%;
         }
     </style>
 </head>
@@ -197,21 +242,38 @@ try {
             <div class="col-md-3">
                 <div class="filters-section">
                     <h5 class="section-title">Filters</h5>
-                    <form>
+                    <form method="GET" action="search_results.php">
+                        <!-- Preserve existing search parameters -->
+                        <input type="hidden" name="location" value="<?php echo htmlspecialchars($location); ?>">
+                        <input type="hidden" name="check_in" value="<?php echo htmlspecialchars($check_in); ?>">
+                        <input type="hidden" name="check_out" value="<?php echo htmlspecialchars($check_out); ?>">
+                        
                         <div class="mb-3">
                             <label class="form-label">Price Range</label>
                             <div class="d-flex gap-2">
-                                <input type="number" class="form-control" placeholder="Min">
-                                <input type="number" class="form-control" placeholder="Max">
+                                <input type="number" 
+                                       class="form-control" 
+                                       name="min_price" 
+                                       placeholder="Min"
+                                       value="<?php echo $min_price ?: ''; ?>">
+                                <input type="number" 
+                                       class="form-control" 
+                                       name="max_price" 
+                                       placeholder="Max"
+                                       value="<?php echo $max_price ?: ''; ?>">
                             </div>
                         </div>
                         
                         <div class="mb-3">
                             <label class="form-label">Sort By</label>
-                            <select class="form-select">
-                                <option>Price: Low to High</option>
-                                <option>Price: High to Low</option>
-                                <option>Latest First</option>
+                            <select class="form-select" name="sort_by">
+                                <option value="">Select sorting</option>
+                                <option value="price_asc" <?php echo isset($_GET['sort_by']) && $_GET['sort_by'] == 'price_asc' ? 'selected' : ''; ?>>
+                                    Price: Low to High
+                                </option>
+                                <option value="price_desc" <?php echo isset($_GET['sort_by']) && $_GET['sort_by'] == 'price_desc' ? 'selected' : ''; ?>>
+                                    Price: High to Low
+                                </option>
                             </select>
                         </div>
                         
@@ -229,7 +291,16 @@ try {
                     ?>
                         <div class="col-md-6">
                             <div class="room-card h-100">
-                                <img src="path_to_room_image.jpg" class="room-image w-100" alt="Room">
+                                <?php if (!empty($room['image'])): ?>
+                                    <img src="data:image/jpeg;base64,<?php echo base64_encode($room['image']); ?>" 
+                                         class="room-image w-100" 
+                                         alt="<?php echo htmlspecialchars($room['Room_Title']); ?>">
+                                <?php else: ?>
+                                    <!-- Default image when no image is available -->
+                                    <div class="room-image w-100 d-flex align-items-center justify-content-center bg-light">
+                                        <i class="fas fa-image fa-3x text-muted"></i>
+                                    </div>
+                                <?php endif; ?>
                                 <div class="room-details">
                                     <div class="d-flex justify-content-between align-items-start mb-3">
                                         <h5 class="mb-0"><?php echo htmlspecialchars($room['Room_Title']); ?></h5>
