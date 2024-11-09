@@ -425,6 +425,122 @@ $booking_stmt->close();
             opacity: 1;
         }
 
+        .booking-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(255, 128, 171, 0.2);
+            transition: transform 0.2s;
+        }
+
+        .booking-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .booking-status {
+            background: linear-gradient(135deg, #ff4081 0%, #ff80ab 100%);
+            color: white;
+            padding: 12px 20px;
+            font-weight: 500;
+        }
+
+        .booking-status i {
+            margin-right: 8px;
+        }
+
+        .booking-content {
+            padding: 20px;
+        }
+
+        .booking-title {
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .booking-details {
+            background: #fff5f8;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .detail-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .detail-item i {
+            color: #ff4081;
+            margin-right: 15px;
+            margin-top: 4px;
+        }
+
+        .detail-item strong {
+            display: block;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .total-amount {
+            color: #ff4081;
+            font-weight: 600;
+            display: block;
+            margin-top: 5px;
+        }
+
+        .host-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .host-info h6 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .host-info p {
+            margin-bottom: 5px;
+            color: #666;
+        }
+
+        .booking-timestamp {
+            font-size: 0.85rem;
+            color: #999;
+            text-align: center;
+        }
+
+        .no-bookings {
+            text-align: center;
+            padding: 40px 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(255, 128, 171, 0.1);
+        }
+
+        .no-bookings i {
+            font-size: 3rem;
+            color: #ff4081;
+            margin-bottom: 15px;
+        }
+
+        .no-bookings h5 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .no-bookings p {
+            color: #666;
+            margin: 0;
+        }
+
 
         
     </style>
@@ -636,36 +752,94 @@ $booking_stmt->close();
 
                 <!-- Bookings Tab -->
                 <div class="tab-pane fade" id="bookings">
-                    <?php if (!empty($room_booking)) : ?>
+                    <?php
+                    // Fetch user's bookings where status is 'accepted'
+                    $bookings_query = "SELECT br.*, 
+                                     COALESCE(l.room_title, br.listing_title) as room_title,
+                                     COALESCE(l.location, br.listing_location) as location,
+                                     COALESCE(l.price, br.listing_price) as price,
+                                     ld.Name as host_name,
+                                     ld.Phone_Number as host_phone,
+                                     ld.Email as host_email,
+                                     DATEDIFF(br.check_out, br.check_in) as total_nights
+                              FROM booking_requests br
+                              LEFT JOIN listing l ON br.listing_id = l.id
+                              JOIN login_details ld ON br.host_username = ld.Username
+                              WHERE br.requester_username = ? 
+                              AND br.status = 'accepted'
+                              ORDER BY br.request_date DESC";
+    
+                    $bookings_stmt = $conn->prepare($bookings_query);
+                    $bookings_stmt->bind_param('s', $username);
+                    $bookings_stmt->execute();
+                    $bookings_result = $bookings_stmt->get_result();
+    
+                    if ($bookings_result->num_rows > 0):
+                    ?>
                         <div class="row g-4">
-                            <?php foreach ($room_booking as $booking) : ?>
-                                <div class="col-md-6">
-                                    <div class="card listing-card h-100">
-                                        <div class="card-body">
-                                            <h5 class="card-title"><?php echo htmlspecialchars($booking['title']); ?></h5>
-                                            <p class="card-text"><?php echo htmlspecialchars($booking['description']); ?></p>
-                                            <ul class="list-unstyled">
-                                                <li><i class="fas fa-map-marker-alt me-2"></i><?php echo htmlspecialchars($booking['location']); ?></li>
-                                                <li><i class="fas fa-money-bill me-2"></i>₹<?php echo htmlspecialchars($booking['price']); ?>/night</li>
-                                                <li><i class="fas fa-calendar me-2"></i><?php echo htmlspecialchars($booking['Number_of_days']); ?> days</li>
-                                            </ul>
-                                            <div class="alert alert-success mb-0">
-                                                Total Amount: ₹<?php echo htmlspecialchars($booking['Total']); ?>
-                                            </div>
+                            <?php while ($booking = $bookings_result->fetch_assoc()): 
+                                $total_amount = $booking['price'] * $booking['total_nights'];
+                            ?>
+                                <div class="col-md-6 mb-4">
+                                    <div class="booking-card">
+                                        <div class="booking-status">
+                                            <i class="fas fa-check-circle"></i> Confirmed Booking
                                         </div>
-                                        <div class="card-footer bg-white">
-                                            <small class="text-muted">
-                                                Booked: <?php echo date('M d', strtotime($booking['available_dates_from'])); ?> - 
-                                                <?php echo date('M d, Y', strtotime($booking['available_dates_to'])); ?>
-                                            </small>
+                                        
+                                        <div class="booking-content">
+                                            <h5 class="booking-title">
+                                                <?php echo htmlspecialchars($booking['room_title']); ?>
+                                            </h5>
+
+                                            <div class="booking-details">
+                                                <div class="detail-item">
+                                                    <i class="fas fa-calendar"></i>
+                                                    <div>
+                                                        <strong>Stay Duration</strong>
+                                                        <span><?php echo date('M d', strtotime($booking['check_in'])); ?> - <?php echo date('M d, Y', strtotime($booking['check_out'])); ?></span>
+                                                        <span class="nights"><?php echo $booking['total_nights']; ?> nights</span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="detail-item">
+                                                    <i class="fas fa-map-marker-alt"></i>
+                                                    <div>
+                                                        <strong>Location</strong>
+                                                        <span><?php echo htmlspecialchars($booking['location']); ?></span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="detail-item">
+                                                    <i class="fas fa-rupee-sign"></i>
+                                                    <div>
+                                                        <strong>Price Details</strong>
+                                                        <span>₹<?php echo number_format($booking['price']); ?> × <?php echo $booking['total_nights']; ?> nights</span>
+                                                        <span class="total-amount">Total: ₹<?php echo number_format($total_amount); ?></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="host-info">
+                                                <h6><i class="fas fa-user me-2"></i>Host Details</h6>
+                                                <p><strong><?php echo htmlspecialchars($booking['host_name']); ?></strong></p>
+                                                <p><i class="fas fa-phone me-2"></i><?php echo htmlspecialchars($booking['host_phone']); ?></p>
+                                                <p><i class="fas fa-envelope me-2"></i><?php echo htmlspecialchars($booking['host_email']); ?></p>
+                                            </div>
+
+                                            <div class="booking-timestamp">
+                                                <i class="fas fa-clock"></i>
+                                                Booked on <?php echo date('M d, Y g:i A', strtotime($booking['request_date'])); ?>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            <?php endforeach; ?>
+                            <?php endwhile; ?>
                         </div>
-                    <?php else : ?>
-                        <div class="alert alert-info">
-                            <i class="fas fa-info-circle me-2"></i> You haven't booked any rooms yet.
+                    <?php else: ?>
+                        <div class="no-bookings">
+                            <i class="fas fa-calendar-times"></i>
+                            <h5>No Confirmed Bookings</h5>
+                            <p>When hosts accept your booking requests, they'll appear here.</p>
                         </div>
                     <?php endif; ?>
                 </div>
