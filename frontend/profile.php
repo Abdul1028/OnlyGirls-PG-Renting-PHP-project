@@ -35,7 +35,7 @@ function debugImages($conn, $listing_id) {
 }
 
 // Retrieve user data
-$user_query = 'SELECT name, email, Phone_Number, age, Married, smoke, drink, home_Town FROM login_details WHERE Username = ?';
+$user_query = 'SELECT name, email, Phone_Number, age, Married, Smoke, Drink, home_Town FROM login_details WHERE Username = ?';
 $user_stmt = $conn->prepare($user_query);
 if ($user_stmt === false) {
     die('Error preparing the user statement: ' . $conn->error);
@@ -53,8 +53,8 @@ if ($user_stmt->fetch()) {
         'phone_number' => $phone_number,
         'age' => $age,
         'Married' => $marital_status,
-        'smoking' => $smoking,
-        'drinking' => $drinking,
+        'Smoke' => $smoking,
+        'Drink' => $drinking,
         'town' => $town
     ];
 }
@@ -182,6 +182,251 @@ $booking_stmt->close();
         .carousel-indicators button.active {
             background-color: #fff;
         }
+
+        .border-warning {
+            border-width: 2px !important;
+        }
+
+        .border-success {
+            border-width: 2px !important;
+        }
+
+        .border-danger {
+            border-width: 2px !important;
+        }
+
+        .card-header {
+            border-bottom: none;
+        }
+
+        .badge {
+            padding: 0.5em 1em;
+        }
+
+        /* Request Card Styles */
+        .request-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(255, 128, 171, 0.2);
+            transition: transform 0.2s;
+        }
+
+        .request-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .request-status {
+            padding: 12px;
+            color: white;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .request-status.pending {
+            background: linear-gradient(135deg, #ffd54f 0%, #ffb300 100%);
+        }
+
+        .request-status.accepted {
+            background: linear-gradient(135deg, #81c784 0%, #4caf50 100%);
+        }
+
+        .request-status.rejected {
+            background: linear-gradient(135deg, #e57373 0%, #f44336 100%);
+        }
+
+        .status-icon {
+            margin-right: 8px;
+        }
+
+        .request-content {
+            padding: 20px;
+        }
+
+        .request-title {
+            color: #ff4081;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .guest-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #fff5f8;
+            border-radius: 10px;
+        }
+
+        .guest-avatar {
+            width: 50px;
+            height: 50px;
+            background: #ff4081;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin-right: 15px;
+        }
+
+        .guest-details h6 {
+            margin: 0;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .contact-info {
+            display: flex;
+            gap: 15px;
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .contact-info i {
+            color: #ff4081;
+        }
+
+        .booking-details {
+            background: #fafafa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .detail-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .detail-item i {
+            color: #ff4081;
+            width: 24px;
+            margin-right: 10px;
+            margin-top: 3px;
+        }
+
+        .detail-item strong {
+            display: block;
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .detail-item span {
+            display: block;
+            color: #333;
+        }
+
+        .nights {
+            font-size: 0.85rem;
+            color: #ff4081;
+            margin-top: 2px;
+        }
+
+        .request-actions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .action-form {
+            flex: 1;
+        }
+
+        .btn-accept, .btn-reject {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .btn-accept {
+            background: #ff4081;
+            color: white;
+        }
+
+        .btn-reject {
+            background: #f8f9fa;
+            color: #666;
+        }
+
+        .btn-accept:hover, .btn-reject:hover {
+            opacity: 0.9;
+        }
+
+        .request-timestamp {
+            font-size: 0.85rem;
+            color: #999;
+            text-align: center;
+        }
+
+        .request-timestamp i {
+            margin-right: 5px;
+        }
+
+        .no-requests {
+            text-align: center;
+            padding: 40px 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(255, 128, 171, 0.1);
+        }
+
+        .no-requests i {
+            font-size: 3rem;
+            color: #ff4081;
+            margin-bottom: 15px;
+        }
+
+        .no-requests h5 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .no-requests p {
+            color: #666;
+            margin: 0;
+        }
+
+        .custom-alert {
+            border: none;
+            border-radius: 12px;
+            padding: 15px 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .custom-alert.alert-success {
+            background: #fff5f8;
+            color: #ff4081;
+            border-left: 4px solid #ff4081;
+        }
+
+        .custom-alert.alert-info {
+            background: #f8f9fa;
+            color: #666;
+            border-left: 4px solid #666;
+        }
+
+        .custom-alert .btn-close {
+            padding: 15px;
+            opacity: 0.5;
+        }
+
+        .custom-alert .btn-close:hover {
+            opacity: 1;
+        }
+
+
+        
     </style>
 </head>
 <body>
@@ -212,16 +457,16 @@ $booking_stmt->close();
                     <!-- User details here -->
                     <div class="d-flex justify-content-around mb-4">
                         <span class="badge rounded-pill badge-pink">
-                            <i class="fas <?php echo $user_data['smoking'] === 'yes' ? 'fa-smoking' : 'fa-smoking-ban'; ?>"></i>
-                            <?php echo ucfirst($user_data['smoking']); ?>
+                            <i class="fas <?php echo strtolower($user_data['Smoke']) === 'yes' ? 'fa-smoking' : 'fa-smoking-ban'; ?>"></i>
+                            <?php echo strtolower($user_data['Smoke']) === 'yes' ? 'Smoker' : 'Non-Smoker'; ?>
                         </span>
                         <span class="badge rounded-pill badge-pink">
-                            <i class="fas <?php echo $user_data['drinking'] === 'yes' ? 'fa-wine-glass' : 'fa-ban'; ?>"></i>
-                            <?php echo ucfirst($user_data['drinking']); ?>
+                            <i class="fas <?php echo strtolower($user_data['Drink']) === 'yes' ? 'fa-wine-glass-alt' : 'fa-ban'; ?>"></i>
+                            <?php echo strtolower($user_data['Drink']) === 'yes' ? 'Drinker' : 'Non-Drinker'; ?>
                         </span>
                         <span class="badge rounded-pill badge-pink">
-                            <i class="fas <?php echo $user_data['Married'] === 'yes' ? 'fa-ring' : 'fa-heart'; ?>"></i>
-                            <?php echo ucfirst($user_data['Married']); ?>
+                            <i class="fas <?php echo strtolower($user_data['Married']) === 'yes' ? ' fa-solid fa-children' : 'fa-user'; ?>"></i>
+                            <?php echo strtolower($user_data['Married']) === 'yes' ? 'Married' : 'Single'; ?>
                         </span>
                     </div>
                     <ul class="list-group list-group-flush">
@@ -248,9 +493,41 @@ $booking_stmt->close();
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" data-bs-toggle="tab" data-bs-target="#bookings">My Bookings</button>
                 </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#requests">
+                        My Requests 
+                        <?php
+                        // Count pending requests
+                        $pending_query = "SELECT COUNT(*) as count FROM booking_requests WHERE host_username = ? AND status = 'pending'";
+                        $pending_stmt = $conn->prepare($pending_query);
+                        $pending_stmt->bind_param('s', $username);
+                        $pending_stmt->execute();
+                        $pending_count = $pending_stmt->get_result()->fetch_assoc()['count'];
+                        if ($pending_count > 0):
+                        ?>
+                            <span class="badge bg-danger ms-2"><?php echo $pending_count; ?></span>
+                        <?php endif; ?>
+                    </button>
+                </li>
             </ul>
 
             <div class="tab-content">
+                <?php if (isset($_GET['message'])): ?>
+                    <?php if ($_GET['message'] === 'deleted'): ?>
+                        <div class="alert custom-alert alert-success alert-dismissible fade show mb-4" role="alert">
+                            <i class="fas fa-check-circle me-2"></i>
+                            Listing has been successfully deleted
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <?php elseif ($_GET['message'] === 'kept'): ?>
+                        <div class="alert custom-alert alert-info alert-dismissible fade show mb-4" role="alert">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Listing has been kept in your profile
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <?php endif; ?>
+                <?php endif; ?>
+
                 <!-- Listings Tab -->
                 <div class="tab-pane fade show active" id="listings">
                     <?php if (!empty($room_listings)) : ?>
@@ -389,6 +666,142 @@ $booking_stmt->close();
                     <?php else : ?>
                         <div class="alert alert-info">
                             <i class="fas fa-info-circle me-2"></i> You haven't booked any rooms yet.
+                        </div>
+                    <?php endif; ?>
+                </div>
+
+                <!-- Requests Tab -->
+                <div class="tab-pane fade" id="requests">
+                    <?php
+                    $requests_query = "SELECT br.*, 
+                                         COALESCE(l.room_title, br.listing_title) as room_title,
+                                         COALESCE(l.location, br.listing_location) as location,
+                                         COALESCE(l.price, br.listing_price) as price,
+                                         ld.Name as requester_name, 
+                                         ld.Email as requester_email,
+                                         ld.Phone_Number as requester_phone,
+                                         DATEDIFF(br.check_out, br.check_in) as total_nights
+                                  FROM booking_requests br
+                                  LEFT JOIN listing l ON br.listing_id = l.id
+                                  JOIN login_details ld ON br.requester_username = ld.Username
+                                  WHERE br.host_username = ?
+                                  ORDER BY br.status = 'pending' DESC, br.request_date DESC";
+    
+                    $requests_stmt = $conn->prepare($requests_query);
+                    $requests_stmt->bind_param('s', $username);
+                    $requests_stmt->execute();
+                    $requests_result = $requests_stmt->get_result();
+    
+                    if ($requests_result->num_rows > 0):
+                    ?>
+                        <div class="row g-4">
+                            <?php while ($request = $requests_result->fetch_assoc()): ?>
+                                <div class="col-md-6 mb-4">
+                                    <div class="request-card">
+                                        <!-- Request Status Banner -->
+                                        <div class="request-status <?php echo $request['status']; ?>">
+                                            <span class="status-icon">
+                                                <?php if($request['status'] === 'pending'): ?>
+                                                    <i class="fas fa-clock"></i>
+                                                <?php elseif($request['status'] === 'accepted'): ?>
+                                                    <i class="fas fa-check-circle"></i>
+                                                <?php else: ?>
+                                                    <i class="fas fa-times-circle"></i>
+                                                <?php endif; ?>
+                                            </span>
+                                            <?php echo ucfirst($request['status']); ?> Request
+                                        </div>
+
+                                        <!-- Request Content -->
+                                        <div class="request-content">
+                                            <h5 class="request-title">
+                                                <?php 
+                                                // If listing still exists, use room_title from listing table
+                                                echo htmlspecialchars($request['listing_title'] ?? $request['room_title']); 
+                                                ?>
+                                            </h5>
+
+                                            <!-- Guest Info -->
+                                            <div class="guest-info">
+                                                <div class="guest-avatar">
+                                                    <i class="fas fa-user"></i>
+                                                </div>
+                                                <div class="guest-details">
+                                                    <h6><?php echo htmlspecialchars($request['requester_name']); ?></h6>
+                                                    <div class="contact-info">
+                                                        <span><i class="fas fa-envelope"></i> <?php echo htmlspecialchars($request['requester_email']); ?></span>
+                                                        <span><i class="fas fa-phone"></i> <?php echo htmlspecialchars($request['requester_phone']); ?></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Booking Details -->
+                                            <div class="booking-details">
+                                                <div class="detail-item">
+                                                    <i class="fas fa-calendar"></i>
+                                                    <div>
+                                                        <strong>Stay Duration</strong>
+                                                        <span><?php echo date('M d', strtotime($request['check_in'])); ?> - <?php echo date('M d, Y', strtotime($request['check_out'])); ?></span>
+                                                        <span class="nights"><?php echo $request['total_nights']; ?> nights</span>
+                                                    </div>
+                                                </div>
+                                                <div class="detail-item">
+                                                    <i class="fas fa-map-marker-alt"></i>
+                                                    <div>
+                                                        <strong>Location</strong>
+                                                        <span>
+                                                            <?php 
+                                                            echo htmlspecialchars($request['listing_location'] ?? $request['location']); 
+                                                            ?>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="detail-item">
+                                                    <i class="fas fa-rupee-sign"></i>
+                                                    <div>
+                                                        <strong>Price per Night</strong>
+                                                        <span>₹<?php 
+                                                            echo number_format($request['listing_price'] ?? $request['price'], 2); 
+                                                        ?></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Action Buttons for Pending Requests -->
+                                            <?php if ($request['status'] === 'pending'): ?>
+                                                <div class="request-actions">
+                                                    <form action="process_request.php" method="POST" class="action-form">
+                                                        <input type="hidden" name="request_id" value="<?php echo $request['id']; ?>">
+                                                        <input type="hidden" name="action" value="accept">
+                                                        <button type="submit" class="btn-accept">
+                                                            <i class="fas fa-check"></i> Accept Request
+                                                        </button>
+                                                    </form>
+                                                    <form action="process_request.php" method="POST" class="action-form">
+                                                        <input type="hidden" name="request_id" value="<?php echo $request['id']; ?>">
+                                                        <input type="hidden" name="action" value="reject">
+                                                        <button type="submit" class="btn-reject">
+                                                            <i class="fas fa-times"></i> Decline
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            <?php endif; ?>
+
+                                            <!-- Request Timestamp -->
+                                            <div class="request-timestamp">
+                                                <i class="fas fa-clock"></i>
+                                                Requested on <?php echo date('M d, Y g:i A', strtotime($request['request_date'])); ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endwhile; ?>
+                        </div>
+                    <?php else: ?>
+                        <div class="no-requests">
+                            <i class="fas fa-inbox"></i>
+                            <h5>No Requests Yet</h5>
+                            <p>When guests request to book your listings, they'll appear here.</p>
                         </div>
                     <?php endif; ?>
                 </div>

@@ -213,9 +213,62 @@ try {
             border-radius: 10px;
             margin-top: 20px;
         }
+
+        .custom-alert-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .custom-alert-box {
+            background: #fff5f8;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(255, 64, 129, 0.2);
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .alert-icon {
+            font-size: 3rem;
+            color: #ff4081;
+            margin-bottom: 15px;
+        }
+
+        .alert-message {
+            color: #ff4081;
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
     </style>
 </head>
 <body>
+    <!-- Custom Alert Overlay -->
+    <div id="customAlert" class="custom-alert-overlay" style="display: none;">
+        <div class="custom-alert-box">
+            <i class="fas fa-check-circle alert-icon"></i>
+            <div class="alert-message">Booking request has been sent successfully!</div>
+        </div>
+    </div>
+
     <div class="container mt-5 mb-5">
         <!-- Breadcrumb -->
         <div class="breadcrumb-section mb-4">
@@ -301,33 +354,51 @@ try {
                         ₹<?php echo number_format($room['Price'], 2); ?> <span class="fs-6">/ night</span>
                     </div>
 
-                    <form action="book_room.php" method="POST">
-                        <input type="hidden" name="room_id" value="<?php echo $room['id']; ?>">
-                        
-                        <div class="mb-3">
-                            <label class="form-label">Check In</label>
-                            <input type="date" 
-                                   class="form-control date-picker" 
-                                   name="check_in" 
-                                   required
-                                   min="<?php echo $room['Date_From']; ?>"
-                                   max="<?php echo $room['Date_To']; ?>">
-                        </div>
+                    <?php if(isset($_SESSION['username'])): ?>
+                        <form action="process_booking.php" method="POST">
+                            <input type="hidden" name="room_id" value="<?php echo $room['id']; ?>">
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Check In</label>
+                                <input type="date" 
+                                       class="form-control date-picker" 
+                                       name="check_in" 
+                                       required
+                                       min="<?php echo $room['Date_From']; ?>"
+                                       max="<?php echo $room['Date_To']; ?>">
+                            </div>
 
-                        <div class="mb-3">
-                            <label class="form-label">Check Out</label>
-                            <input type="date" 
-                                   class="form-control date-picker" 
-                                   name="check_out" 
-                                   required
-                                   min="<?php echo $room['Date_From']; ?>"
-                                   max="<?php echo $room['Date_To']; ?>">
-                        </div>
+                            <div class="mb-3">
+                                <label class="form-label">Check Out</label>
+                                <input type="date" 
+                                       class="form-control date-picker" 
+                                       name="check_out" 
+                                       required
+                                       min="<?php echo $room['Date_From']; ?>"
+                                       max="<?php echo $room['Date_To']; ?>">
+                            </div>
 
-                        <button type="submit" class="book-btn">
-                            <i class="fas fa-calendar-check me-2"></i>Book Now
-                        </button>
-                    </form>
+                            <?php if(isset($_GET['error'])): ?>
+                                <div class="alert alert-danger mb-3">
+                                    <?php echo htmlspecialchars($_GET['error']); ?>
+                                </div>
+                            <?php endif; ?>
+
+                            <?php if(isset($_GET['success'])): ?>
+                                <div class="alert alert-success mb-3">
+                                    Booking request sent successfully!
+                                </div>
+                            <?php endif; ?>
+
+                            <button type="submit" class="book-btn">
+                                <i class="fas fa-calendar-check me-2"></i>Book Now
+                            </button>
+                        </form>
+                    <?php else: ?>
+                        <div class="alert alert-warning">
+                            Please <a href="login.php" class="alert-link">login</a> to book this room.
+                        </div>
+                    <?php endif; ?>
 
                     <div class="host-section">
                         <div class="d-flex align-items-center">
@@ -371,6 +442,22 @@ try {
                 }
             });
         });
+
+        // Check for success parameter and session flag
+        <?php if(isset($_GET['success']) && isset($_SESSION['show_booking_alert'])): ?>
+            // Show the alert
+            document.getElementById('customAlert').style.display = 'flex';
+            
+            // Hide after 2 seconds
+            setTimeout(function() {
+                document.getElementById('customAlert').style.display = 'none';
+            }, 2000);
+            
+            <?php 
+            // Clear the session flag
+            unset($_SESSION['show_booking_alert']); 
+            ?>
+        <?php endif; ?>
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

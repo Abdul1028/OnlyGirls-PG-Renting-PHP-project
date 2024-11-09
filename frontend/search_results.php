@@ -26,10 +26,16 @@ try {
     $check_out = isset($_GET['check_out']) ? $conn->real_escape_string($_GET['check_out']) : '';
     $sort_by = isset($_GET['sort_by']) ? $_GET['sort_by'] : '';
 
+    // Get additional filter parameters
+    $smoking = isset($_GET['smoking']) ? $conn->real_escape_string($_GET['smoking']) : '';
+    $drinking = isset($_GET['drinking']) ? $conn->real_escape_string($_GET['drinking']) : '';
+    $marital_status = isset($_GET['marital_status']) ? $conn->real_escape_string($_GET['marital_status']) : '';
+
     // Build query
-    $query = "SELECT l.*, li.image 
+    $query = "SELECT l.*, li.image, ld.Smoke, ld.Drink, ld.Married 
               FROM listing l 
-              LEFT JOIN listing_images li ON l.id = li.listing_id 
+              LEFT JOIN listing_images li ON l.id = li.listing_id
+              LEFT JOIN login_details ld ON l.Username = ld.Username 
               WHERE 1=1";
 
     if (!empty($location)) {
@@ -42,6 +48,18 @@ try {
 
     if ($max_price > 0) {
         $query .= " AND l.Price <= $max_price";
+    }
+
+    if (!empty($smoking)) {
+        $query .= " AND ld.Smoke = '$smoking'";
+    }
+
+    if (!empty($drinking)) {
+        $query .= " AND ld.Drink = '$drinking'";
+    }
+
+    if (!empty($marital_status)) {
+        $query .= " AND ld.Married = '$marital_status'";
     }
 
     if (!empty($check_in) && !empty($check_out)) {
@@ -208,6 +226,225 @@ try {
         .price-range-inputs input {
             width: 50%;
         }
+
+        .host-preferences {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .preference-badge {
+            font-size: 0.75rem;
+            padding: 4px 8px;
+            border-radius: 15px;
+            background: white;
+            color: #666;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .preference-badge i {
+            color: #ff4081;
+            margin-right: 4px;
+        }
+
+        .host-link {
+            color: #666;
+            transition: color 0.2s ease;
+        }
+
+        .host-link:hover {
+            color: #ff4081;
+        }
+
+        .user-profile-card {
+            padding: 20px;
+        }
+
+        .profile-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto;
+            display: block;
+        }
+
+        .default-profile-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            font-size: 3rem;
+            color: #adb5bd;
+        }
+
+        .user-info {
+            text-align: left;
+        }
+
+        .info-item {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-item i {
+            color: #ff4081;
+            width: 20px;
+        }
+
+        .preferences-section {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .preference-item {
+            padding: 8px 15px;
+            border-radius: 20px;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .preference-item.active {
+            background: #ffe0eb;
+            color: #ff4081;
+        }
+
+        .preference-item i {
+            color: #ff4081;
+        }
+
+        .host-link {
+            color: #666;
+            transition: color 0.2s ease;
+        }
+
+        .host-link:hover {
+            color: #ff4081;
+        }
+
+        .user-profile-card {
+            padding: 20px;
+        }
+
+        .profile-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto;
+            display: block;
+        }
+
+        .default-profile-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            font-size: 3rem;
+            color: #adb5bd;
+        }
+
+        .user-info {
+            text-align: left;
+        }
+
+        .info-item {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-item i {
+            color: #ff4081;
+            width: 20px;
+        }
+
+        .compatibility-filters {
+            background: #fff5f8;
+            padding: 8px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(255, 64, 129, 0.1);
+            width: 100%;
+        }
+
+        .filter-section-title {
+            color: #ff4081;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ffe0eb;
+        }
+
+        .preference-filter {
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        .preference-filter .form-label {
+            color: #666;
+            font-weight: 500;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .preference-filter .form-label i {
+            color: #ff4081;
+        }
+
+        .preference-buttons {
+            display: flex;
+            flex-wrap: nowrap;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .preference-btn {
+            background: white;
+            border: 1px solid #ddd;
+            color: #666;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+            flex: 1;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .preference-btn:hover {
+            background: #fff5f8;
+            border-color: #ff4081;
+            color: #ff4081;
+        }
+
+        .btn-check:checked + .preference-btn {
+            background: #ff4081;
+            border-color: #ff4081;
+            color: white;
+        }
+
+        .btn-check:focus + .preference-btn {
+            box-shadow: 0 0 0 0.2rem rgba(255, 64, 129, 0.25);
+        }
+
     </style>
 </head>
 <body>
@@ -277,6 +514,77 @@ try {
                             </select>
                         </div>
                         
+                        <!-- Compatibility Filters -->
+                        <div class="compatibility-filters  mb-4">
+                            <h6 class="filter-section-title">
+                                <i class="fas fa-user-check me-2"></i>
+                                Host Preferences
+                            </h6>
+                            
+                            <!-- Smoking Preference -->
+                            <div class="preference-filter mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-smoking me-2"></i>
+                                    Smoking Preference
+                                </label>
+                                <div class="preference-buttons">
+                                    <input type="radio" class="btn-check" name="smoking" id="smoking-any" value="" 
+                                           <?php echo !isset($_GET['smoking']) || $_GET['smoking'] === '' ? 'checked' : ''; ?>>
+                                    <label class="btn preference-btn" for="smoking-any">Any</label>
+
+                                    <input type="radio" class="btn-check" name="smoking" id="smoking-yes" value="Yes"
+                                           <?php echo isset($_GET['smoking']) && $_GET['smoking'] === 'Yes' ? 'checked' : ''; ?>>
+                                    <label class="btn preference-btn" for="smoking-yes">Smoker</label>
+
+                                    <input type="radio" class="btn-check" name="smoking" id="smoking-no" value="No"
+                                           <?php echo isset($_GET['smoking']) && $_GET['smoking'] === 'No' ? 'checked' : ''; ?>>
+                                    <label class="btn preference-btn" for="smoking-no">Non-Smoker</label>
+                                </div>
+                            </div>
+
+                            <!-- Drinking Preference -->
+                            <div class="preference-filter mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-wine-glass-alt me-2"></i>
+                                    Drinking Preference
+                                </label>
+                                <div class="preference-buttons">
+                                    <input type="radio" class="btn-check" name="drinking" id="drinking-any" value="" 
+                                           <?php echo !isset($_GET['drinking']) || $_GET['drinking'] === '' ? 'checked' : ''; ?>>
+                                    <label class="btn preference-btn" for="drinking-any">Any</label>
+
+                                    <input type="radio" class="btn-check" name="drinking" id="drinking-yes" value="Yes"
+                                           <?php echo isset($_GET['drinking']) && $_GET['drinking'] === 'Yes' ? 'checked' : ''; ?>>
+                                    <label class="btn preference-btn" for="drinking-yes">Drinker</label>
+
+                                    <input type="radio" class="btn-check" name="drinking" id="drinking-no" value="No"
+                                           <?php echo isset($_GET['drinking']) && $_GET['drinking'] === 'No' ? 'checked' : ''; ?>>
+                                    <label class="btn preference-btn" for="drinking-no">Non-Drinker</label>
+                                </div>
+                            </div>
+
+                            <!-- Marital Status -->
+                            <div class="preference-filter mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-heart me-2"></i>
+                                    Marital Status
+                                </label>
+                                <div class="preference-buttons">
+                                    <input type="radio" class="btn-check" name="marital_status" id="marital-any" value="" 
+                                           <?php echo !isset($_GET['marital_status']) || $_GET['marital_status'] === '' ? 'checked' : ''; ?>>
+                                    <label class="btn preference-btn" for="marital-any">Any</label>
+
+                                    <input type="radio" class="btn-check" name="marital_status" id="marital-yes" value="Yes"
+                                           <?php echo isset($_GET['marital_status']) && $_GET['marital_status'] === 'Yes' ? 'checked' : ''; ?>>
+                                    <label class="btn preference-btn" for="marital-yes">Married</label>
+
+                                    <input type="radio" class="btn-check" name="marital_status" id="marital-no" value="No"
+                                           <?php echo isset($_GET['marital_status']) && $_GET['marital_status'] === 'No' ? 'checked' : ''; ?>>
+                                    <label class="btn preference-btn" for="marital-no">Single</label>
+                                </div>
+                            </div>
+                        </div>
+                        
                         <button type="submit" class="btn view-btn w-100">Apply Filters</button>
                     </form>
                 </div>
@@ -327,7 +635,12 @@ try {
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div class="host">
                                             <i class="fas fa-user-circle me-1"></i>
-                                            <?php echo htmlspecialchars($room['Username']); ?>
+                                            <a href="#" class="text-decoration-none host-link" 
+                                               data-bs-toggle="modal" 
+                                               data-bs-target="#userModal"
+                                               data-username="<?php echo htmlspecialchars($room['Username']); ?>">
+                                                <?php echo htmlspecialchars($room['Username']); ?>
+                                            </a>
                                         </div>
                                         <a href="room_details.php?id=<?php echo $room['id']; ?>" 
                                            class="view-btn text-decoration-none">
@@ -359,7 +672,102 @@ try {
         </div>
     </div>
 
+    <!-- User Profile Modal -->
+    <div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title" id="userModalLabel">Host Profile</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center" id="userProfileContent">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const userModal = document.getElementById('userModal');
+        const profileContent = document.getElementById('userProfileContent');
+
+        userModal.addEventListener('show.bs.modal', function(event) {
+            const button = event.relatedTarget;
+            const username = button.getAttribute('data-username');
+            
+            // Clear previous content and show loading spinner
+            profileContent.innerHTML = `
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>`;
+
+            // Fetch user profile data
+            fetch(`get_user_profile.php?username=${encodeURIComponent(username)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const user = data.data;
+                        const profileHtml = `
+                            <div class="user-profile-card">
+                                ${user.profile_image ? 
+                                    `<img src="data:image/jpeg;base64,${user.profile_image}" 
+                                          class="profile-image mb-3" 
+                                          alt="Profile Picture">` : 
+                                    `<div class="default-profile-image mb-3">
+                                        <i class="fas fa-user-circle"></i>
+                                     </div>`
+                                }
+                                <h4 class="mb-3">${user.Name}</h4>
+                                <div class="user-info">
+                                    <div class="info-item">
+                                        <i class="fas fa-envelope"></i>
+                                        <span>${user.Email}</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <i class="fas fa-phone"></i>
+                                        <span>${user.Phone_Number}</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <i class="fas fa-home"></i>
+                                        <span>${user.Home_Town}</span>
+                                    </div>
+                                    <div class="preferences-section mt-3">
+                                        <div class="preference-item ${user.Smoke === 'yes' ? 'active' : ''}">
+                                            <i class="fas ${user.Smoke === 'yes' ? 'fa-smoking' : 'fa-smoking-ban'}"></i>
+                                            <span>${user.Smoke === 'yes' ? 'Smoker' : 'Non-Smoker'}</span>
+                                        </div>
+                                        <div class="preference-item ${user.Drink === 'yes' ? 'active' : ''}">
+                                            <i class="fas ${user.Drink === 'Yes' ? 'fa-wine-glass' : 'fa-ban'}"></i>
+                                            <span>${user.Drink === 'yes' ? 'Drinker' : 'Non-Drinker'}</span>
+                                        </div>
+                                        <div class="preference-item">
+                                            <i class="fas ${user.Married === 'yes' ? 'fa-rings-wedding' : 'fa-user'}"></i>
+                                            <span>${user.Married === 'yes' ? 'Married' : 'Single'}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>`;
+                        profileContent.innerHTML = profileHtml;
+                    } else {
+                        profileContent.innerHTML = `
+                            <div class="alert alert-danger">
+                                Error loading profile: ${data.error}
+                            </div>`;
+                    }
+                })
+                .catch(error => {
+                    profileContent.innerHTML = `
+                        <div class="alert alert-danger">
+                            Error loading profile. Please try again.
+                        </div>`;
+                });
+        });
+    });
+    </script>
 </body>
 </html>
 
